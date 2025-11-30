@@ -5,6 +5,7 @@ import models
 import schemas
 import crud
 from database import engine, get_db, Base
+from fastapi.middleware.cors import CORSMiddleware 
 
 # Create database tables
 Base.metadata.create_all(bind=engine)
@@ -13,6 +14,15 @@ app = FastAPI(
     title="ElectroZone Product Service",
     description="Product management service for ElectroZone electronics store",
     version="1.0.0"
+)
+
+# Add CORS middleware for cross-service communication
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # In production, specify exact origins
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 # ==================== Root & Health Endpoints ====================
