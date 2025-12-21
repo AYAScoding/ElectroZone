@@ -2,7 +2,10 @@ package com.example.order_service.controller;
 
 import com.example.order_service.model.Order;
 import com.example.order_service.service.OrderService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.order_service.payment.PaymentService;
+import com.stripe.exception.StripeException;
+import com.stripe.model.PaymentIntent;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,8 +18,17 @@ import java.util.Optional;
 @CrossOrigin(origins = "*")
 public class OrderController {
 
-    @Autowired
-    private OrderService orderService;
+    private final OrderService orderService;
+    private final PaymentService paymentService;
+    private final String currency;
+
+    public OrderController(OrderService orderService,
+            PaymentService paymentService,
+            @Value("${stripe.currency}") String currency) {
+        this.orderService = orderService;
+        this.paymentService = paymentService;
+        this.currency = currency;
+    }
 
     // Create a new order
     @PostMapping
@@ -92,5 +104,24 @@ public class OrderController {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    // Pay for an order (Stripe PaymentIntent)
+    @PostMapping("/{id}/pay")
+    public ResponseEntity<String> payForOrder(@PathVariable Long id) {
+        Optional<Order> orderOptional = orderService.getOrderById(id);
+        if (orderOptional.isEmpty()) {
+            return new ResponseEntity<>("Order not found", HttpStatus.NOT_FOUND);
+        }
+
+        Order order = orderOptional.get();
+        try {
+            PaymentIntent paymentIntent = paymentService.createPaymentIntent(order, currency);
+            // return client secret for frontend
+            return new ResponseEntity<>(paymentIntent.getClientSecret(), HttpStatus.OK);
+        } catch (StripeException e) {
+            return new ResponseEntity<>("Payment failed: " + e.getMessage(),
+                    HttpStatus.BAD_REQUEST);
+        }
     }
 }
