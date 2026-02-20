@@ -1,31 +1,36 @@
-# Environment variables (contains passwords!)
-.env
+# Dependencies
+**/node_modules/
+**/.next/
+**/out/
+**/dist/
+**/build/
+**/target/
+**/venv/
+**/__pycache__/
 
-# Virtual environment
-venv/
+# Environment variables
+**/.env*
+!.env.example
 
+# Logs & databases
+**/*.log
+*.db
+*.sqlite
+*.sqlite3
 
-# Python cache
-__pycache__/
+# IDE & OS
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# Python
 *.pyc
 *.pyo
 *.pyd
 .Python
 
-# IDE
-.vscode/
-.idea/
-*.swp
-*.swo
-
-# OS files
-.DS_Store
-Thumbs.db
-
-# Database files
-*.db
-*.sqlite
-*.sqlite3
-
-# Logs
-*.log
+# Docker overrides
+**/docker-compose.override.yml

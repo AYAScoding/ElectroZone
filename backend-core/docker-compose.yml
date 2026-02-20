@@ -1,0 +1,47 @@
+# No 'version' needed in modern Docker Compose
+services:
+  mongo:
+    image: mongo:6
+    container_name: user-mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - backend-net
+
+  user-service:
+    build: ./user-service
+    container_name: user-service
+    ports:
+      - "5001:5001"
+    environment:
+      PORT: "5001"
+      NODE_ENV: production
+      JWT_SECRET: super_strong_jwt_secret_here
+      MONGO_URI: mongodb://mongo:27017/user-service-db
+    depends_on:
+      - mongo
+    networks:
+      - backend-net
+    restart: unless-stopped
+
+  api-gateway:
+    build: ./api-gateway
+    container_name: api-gateway
+    ports:
+      - "5000:3000"
+    environment:
+      PORT: "3000"
+    depends_on:
+      - user-service
+    networks:
+      - backend-net
+    restart: unless-stopped
+
+volumes:
+  mongo_data:
+
+networks:
+  backend-net:
+    driver: bridge
