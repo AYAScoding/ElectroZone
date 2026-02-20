@@ -281,9 +281,6 @@ export default function ProductsPage() {
             <h1 className="text-3xl font-bold mb-2">
               {categoryParam ? `${categoryParam}` : "All Products"}
             </h1>
-            <p className="text-muted-foreground">
-              API: {API_BASE ?? "(not set)"}
-            </p>
           </div>
 
           <div className="flex gap-8">
