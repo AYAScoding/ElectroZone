@@ -3,22 +3,9 @@
 
 A scalable, multi-language e-commerce platform for electronics built with **microservices architecture**, **REST APIs**, **JWT authentication**, and **Stripe payments**. Production-ready with Docker support.
 
-**Status**: ✅ Production-Ready | **Version**: 1.0.0 | **License**: MIT
 
----
 
-## 📋 Table of Contents
-- [Overview](#overview)
-- [Architecture](#architecture)
-- [Technology Stack](#technology-stack)
-- [Key Features](#key-features)
-- [Quick Start](#quick-start)
-- [Services](#services)
-- [Running](#running)
-- [API](#api)
-- [Testing](#testing)
-- [Deployment](#deployment)
-- [Team](#team)
+
 
 ---
 
