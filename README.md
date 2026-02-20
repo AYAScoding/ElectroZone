@@ -170,27 +170,6 @@ cd frontend && npm run dev                   # Terminal 5
 
 ---
 
-## 📡 API Endpoints
-
-**Base URL**: `http://localhost:3001/api`
-
-### Authentication
-```bash
-curl -X POST http://localhost:3001/api/auth/login \
-  -H "Content-Type: application/json" \
-  -d '{"email":"user@test.com","password":"Pass123!"}'
-```
-
-### Key Endpoints
-```
-Auth: POST /auth/login → JWT
-Products: GET /products, POST /products (admin)
-Orders: POST /orders, GET /orders (protected)
-Payments: POST /orders/:id/pay
-```
-
----
-
 ## 🧪 Testing
 
 ```bash
@@ -222,17 +201,4 @@ docker-compose up -d  # Development
 
 **Supervisor**: Leila Vaighan
 
----
 
-**🚀 Updated**: February 19, 2026
-```
-
-**✅ Fixed styling - Copy this entire block to `README.md`** 
-
-**Changes made for perfect GitHub preview:**
-- Removed outer markdown wrapper 
-- Consistent spacing after headers
-- Clean bullet list formatting
-- Proper code block spacing
-- Simplified overview section
-- Perfect table alignment 🎉
