@@ -111,7 +111,7 @@ docker-compose up -d
 
 ---
 
-## � Development Team
+##  Development Team
 
 | Role | Developer | Focus |
 | :--- | :--- | :--- |
@@ -121,6 +121,4 @@ docker-compose up -d
 
 ---
 
-<p align="center">
-  Built with ❤️ for the future of E-Commerce.
-</p>
+
