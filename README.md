@@ -8,6 +8,7 @@
 [![License](https://img.shields.io/badge/License-MIT-gray.svg)](#)
 
 ---
+---
 ## 🖼️ Gallery
 
 ### 🛍️ Customer Experience
