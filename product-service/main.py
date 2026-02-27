@@ -140,6 +140,14 @@ def update_product_stock(product_id: int, quantity: int, db: Session = Depends(g
         raise HTTPException(status_code=404, detail="Product not found")
     return {"message": "Stock updated successfully", "product_id": product_id, "new_quantity": quantity}
 
+@app.patch("/products/{product_id}/stock/decrease")
+def decrease_product_stock(product_id: int, qty: int, db: Session = Depends(get_db)):
+    """Decrease product stock quantity (for order processing)"""
+    db_product = crud.decrease_product_stock(db, product_id=product_id, quantity=qty)
+    if db_product is None:
+        raise HTTPException(status_code=404, detail="Product not found")
+    return {"message": "Stock decreased successfully", "product_id": product_id, "new_quantity": db_product.stock_quantity}
+
 @app.delete("/products/{product_id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_product(product_id: int, db: Session = Depends(get_db)):
     """Delete a product"""

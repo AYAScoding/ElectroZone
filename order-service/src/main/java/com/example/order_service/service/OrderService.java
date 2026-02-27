@@ -15,12 +15,23 @@ public class OrderService {
     @Autowired
     private OrderRepository orderRepository;
 
+    @Autowired
+    private com.example.order_service.client.ProductServiceClient productServiceClient;
+
     // Create a new order
     public Order createOrder(Order order) {
         order.setOrderDate(LocalDateTime.now());
         order.setStatus("PENDING");
         order.setPaymentStatus("PENDING");
-        return orderRepository.save(order);
+
+        Order savedOrder = orderRepository.save(order);
+
+        // Decrease stock in product-service
+        if (savedOrder.getProductId() != null) {
+            productServiceClient.decreaseStock(savedOrder.getProductId(), savedOrder.getQuantity());
+        }
+
+        return savedOrder;
     }
 
     // Get all orders

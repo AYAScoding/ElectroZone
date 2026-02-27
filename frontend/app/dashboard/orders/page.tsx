@@ -73,7 +73,7 @@ export default function OrdersPage() {
       try {
         // 1) Load orders
         const ordersRes = await fetch(
-          `${ORDER_SERVICE_URL}/api/orders/user/${user.id}`,
+          `/api/orders/user/${user.id}`,
           { cache: "no-store" }
         );
         if (!ordersRes.ok) {

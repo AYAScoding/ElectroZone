@@ -112,6 +112,36 @@ export default function Home() {
         },
       }));
 
+      // Calculate Recent Activity (latest 5 orders)
+      const recentActivities = [...ordersRaw]
+        .sort((a: any, b: any) => new Date(b.orderDate || 0).getTime() - new Date(a.orderDate || 0).getTime())
+        .slice(0, 5)
+        .map((o: any) => ({
+          id: Number(o.id),
+          action: "New Order",
+          description: `Order #${o.id} placed by ${userNameById.get(String(o.userId)) || `User ${o.userId}`}`,
+          time: new Date(o.orderDate || Date.now()).toLocaleString(),
+        }));
+
+      // Calculate Top Products
+      const productSalesMap = new Map<number, number>();
+      for (const o of ordersRaw) {
+        const pid = Number(o.productId);
+        productSalesMap.set(pid, (productSalesMap.get(pid) ?? 0) + (o.quantity ?? 1));
+      }
+
+      const topProducts = Array.from(productSalesMap.entries())
+        .map(([pid, sales]) => {
+          const product = productsRaw.find((p: any) => Number(p.id) === pid);
+          return {
+            id: pid,
+            name: product ? product.name : `Product #${pid}`,
+            sales: sales,
+          };
+        })
+        .sort((a, b) => b.sales - a.sales)
+        .slice(0, 5);
+
       const totalItems = productsUi.length;
       const totalOrders = ordersUi.length;
       const outOfStock = productsUi.filter((p) => p.status !== "Active").length;
@@ -127,8 +157,8 @@ export default function Home() {
           outOfStock: { value: String(outOfStock), change: "0" },
           revenue: { value: `$${revenueNumber.toFixed(2)}`, change: "+0%" },
         },
-        recentActivities: [],
-        topProducts: [],
+        recentActivities,
+        topProducts,
       };
 
       setDashboardData((prev) => ({

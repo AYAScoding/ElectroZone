@@ -31,7 +31,7 @@ export default function CheckoutSuccessPage() {
     }
 
     const load = async () => {
-      const res = await fetch(`${ORDER_SERVICE_URL}/api/orders/${orderId}`);
+      const res = await fetch(`/api/orders/id/${orderId}`);
       if (!res.ok) {
         router.push("/");
         return;

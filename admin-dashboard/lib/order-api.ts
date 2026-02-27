@@ -31,7 +31,7 @@ export async function getOrderById(id: string | number): Promise<OrderDto> {
 }
 
 export async function updateOrderStatus(id: string | number, status: string): Promise<OrderDto> {
-  const res = await fetch(`${ORDER_SERVICE_URL}/api/orders/${id}/status`, {
+  const res = await fetch(`/api/orders/${id}/status`, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(status),
