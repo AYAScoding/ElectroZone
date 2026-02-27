@@ -1,251 +1,125 @@
 
-# 🛍️ ElectroZone - Microservices E-Commerce Platform
+# 🛍️ ElectroZone - Full-Stack Microservices E-Commerce
 
-A scalable, multi-language e-commerce platform for electronics built with **microservices architecture**, **REST APIs**, **JWT authentication**, and **Stripe payments**. Production-ready with Docker support.
+**ElectroZone** is a high-performance, professional e-commerce platform for high-end electronics. Built with a modern **microservices architecture**, it demonstrates seamless integration between different languages and frameworks, advanced security patterns, and premium user experiences.
 
-**Status**: ✅ Production-Ready | **Version**: 1.0.0 | **License**: MIT
+[![Status](https://img.shields.io/badge/Status-Live-success.svg)](#)
+[![Version](https://img.shields.io/badge/Version-1.0.0-blue.svg)](#)
+[![License](https://img.shields.io/badge/License-MIT-gray.svg)](#)
+
+---
+## 🖼️ Gallery
+
+### 🛍️ Customer Experience
+
+<p align="center">
+  <img src="./screenshots/storefront.png" width="45%" alt="Storefront Catalog" />
+  <img src="./screenshots/product-detail.png" width="45%" alt="Product Details" />
+  <br/>
+  <em>Modern, responsive catalog with advanced filtering and immersive product views.</em>
+</p>
 
 ---
 
-## 📋 Table of Contents
-- [Overview](#overview)
-- [Architecture](#architecture)
-- [Technology Stack](#technology-stack)
-- [Key Features](#key-features)
-- [Quick Start](#quick-start)
-- [Services](#services)
-- [Running](#running)
-- [API](#api)
-- [Testing](#testing)
-- [Deployment](#deployment)
-- [Team](#team)
+### 🛠️ Admin Command Center
+
+<p align="center">
+  <img src="./screenshots/admin-overview.png" width="45%" alt="Admin Overview" />
+  <img src="./screenshots/admin-orders.png" width="45%" alt="Order Management" />
+  <br/>
+  <em>Comprehensive analytics dashboard with real-time order processing and management tools.</em>
+</p>
 
 ---
 
-## 🎯 Overview
-
-**ElectroZone** is a modern e-commerce platform designed for selling electronics:
-
-- **Microservices Architecture** - Independent, scalable services
-- **Multi-Language Backend** - Node.js, Python (FastAPI), Java (Spring Boot 3)
-- **Secure Authentication** - JWT tokens + role-based access
-- **Stripe Payments** - PaymentIntents API integration
-- **Multi-Language UI** - 7 languages with real-time switching
-- **Responsive Design** - Mobile-first + dark/light themes
-
----
-```
 ## 🏗️ Architecture
 
-Architecture Flow
+The platform follows a **Decoupled Microservices Pattern**, ensuring each domain (Users, Products, Orders) is independently scalable and maintainable.
 
-Frontend (React / Next.js)
-        │
-        ▼
-┌───────────────────────────────┐
-│        API Gateway            │
-│      (Node.js / TS)           │
-└───────────────┬───────────────┘
-                │
- ┌──────────────┼────────────────────────┐
- │              │                        │
- ▼              ▼                        ▼
-┌─────────────────────┐    ┌────────────────────┐    ┌──────────────────┐
-│   User Service       │    │ Product Service     │    │ Order Service    │
-│     (Node.js)        │    │   (Python)          │    │     (Java)       │
-└───────────┬──────────┘    └──────────┬─────────┘    └──────────┬──────┘
-            │                           │                        │
-            ▼                           ▼                        ▼
-      ┌──────────┐               ┌────────────┐             ┌─────────┐
-      │ MongoDB  │               │ PostgreSQL │             │  MySQL   │
-      │ (User)   │               │ (Product)  │             │ (Order)  │
-      └──────────┘               └────────────┘             └─────────┘
-
-
+```mermaid
+graph TD
+    User((Customer)) --> Frontend[Next.js Storefront]
+    Admin((Admin)) --> Dashboard[Next.js Admin Dashboard]
+    
+    Frontend --> Gateway[API Gateway / Proxy]
+    Dashboard --> Gateway
+    
+    Gateway --> US[User Service - Node.js]
+    Gateway --> PS[Product Service - FastAPI]
+    Gateway --> OS[Order Service - Spring Boot]
+    
+    US --- Mongo[(MongoDB)]
+    PS --- Postgre[(PostgreSQL)]
+    OS --- MySQL[(MySQL)]
+    
+    OS -.->|Stock Update| PS
 ```
 
-| Service      | Language      | Database     | Port |
-|--------------|---------------|--------------|------|
-| **User**     | Node.js       | MongoDB      | 5000 |
-| **Product**  | Python/FastAPI| PostgreSQL   | 8000 |
-| **Order**    | Java/Spring   | MySQL        | 8082 |
-| **Gateway**  | Node.js       | -            | 3001 |
+| Service | Technology | Port | Primary Responsibility |
+| :--- | :--- | :--- | :--- |
+| **Frontend** | Next.js / React | `3000` | Customer Catalog & Checkout |
+| **Admin UI** | Next.js / Tailwind | `3001` | Inventory & Order Analytics |
+| **User** | Node.js / Express | `5001` | Auth, Identity & Role Management |
+| **Product** | FastAPI / Python | `8000` | Catalog Service & Stock Logic |
+| **Order** | Spring Boot / Java | `8082` | Transactional Processing & Stripe |
 
 ---
 
 ## 🛠️ Technology Stack
 
-### Backend
-```
-Node.js 16+ + Express.js
-Python 3.12+ + FastAPI
-Java 17 + Spring Boot 3
-JWT + Stripe API
-```
+### **Frontend & UI**
+- **Framework:** Next.js 14+ (App Router)
+- **Styling:** Tailwind CSS + shadcn/ui
+- **State/Data:** React Hooks + Server Actions
+- **i18n:** Multi-language support (7+ languages)
 
-### Frontend
-```
-React 18 + Next.js 13 + TypeScript
-Tailwind CSS + shadcn/ui
-i18n (7 languages)
-```
-
-### DevOps
-```
-Docker + Docker Compose
-MongoDB + PostgreSQL 17 + MySQL 8
-Jest + PyTest + Playwright
-```
+### **Backend Ecosystem**
+- **Java:** Spring Boot 3, Hibernate, MySQL
+- **Python:** FastAPI, SQLAlchemy, PostgreSQL
+- **Node.js:** Express, JWT, MongoDB
+- **Payments:** Stripe API Integration
 
 ---
 
-## ✨ Key Features
+## ✨ Enterprise Features
 
-- **🔐 Authentication**: JWT + roles (user/admin)
-- **📦 Products**: CRUD, search, filters (brand/category/stock)
-- **🛒 Shopping Cart**: Real-time pricing + tax/shipping
-- **💳 Payments**: Stripe PaymentIntents + webhooks
-- **📊 Admin Dashboard**: Analytics + order management
-- **🌐 Multi-Language**: EN/ES/FR/TR/RU/Fa/AR
-- **🎨 Themes**: 4 colors + light/dark mode
-- **📱 Responsive**: Mobile-first design
-- **✅ Testing**: 100% unit test coverage
+- **🔐 Robust Security:** Zero-trust JWT authentication with role-based dashboard access.
+- **📦 Smart Inventory:** Atomic stock reduction logic across Product/Order service boundaries.
+- **💳 Payment Mastery:** Secure checkout flow using Stripe's latest PaymentIntents.
+- **🌐 Global Reach:** RTL support and real-time language switching.
+- **📊 Real-time Ops:** Dynamic admin overview with live sales analytics and recent activity tracking.
 
 ---
 
-## 🚀 Quick Start
+## 🚀 Getting Started
 
-### Prerequisites
-```
-Node.js 16+ | Python 3.12+ | Java 17+
-Docker | MongoDB | PostgreSQL | MySQL
-```
-
-### 1-Click Setup
+### 1-Click Deployment (Docker)
 ```bash
 git clone https://github.com/AYAScoding/ElectroZone.git
 cd ElectroZone
 docker-compose up -d
 ```
+*App will be available at [http://localhost:3000](http://localhost:3000)*
 
-**Access**: http://localhost:3000
-
----
-
-## 🔧 Services Overview
-
-### **User Service** (Node.js:5000)
-```
-Auth: POST /auth/register, POST /auth/login
-Profile: GET/PUT /users/:id
-```
-**Database**: MongoDB
-
-### **Product Service** (FastAPI:8000)
-```
-Docs: http://localhost:8000/docs
-GET /products, /products/search?q=laptop
-GET /products/brand/Apple, /products/stock/available
-```
-**Tests**: 23 unit tests (100% coverage)
-
-### **Order Service** (Spring Boot:8082)
-```
-POST /api/orders, GET /api/orders/user/:id
-POST /api/orders/:id/pay (Stripe)
-```
-**Database**: MySQL
-
-### **API Gateway** (Node.js:3001)
-```
-JWT validation + request routing + CORS
-```
+### Manual Development Setup
+1. **User Service:** `cd user-service && npm run dev`
+2. **Product Service:** `cd product-service && uvicorn main:app`
+3. **Order Service:** `cd order-service && mvn spring-boot:run`
+4. **Admin Dashboard:** `cd admin-dashboard && npm run dev`
+5. **Frontend:** `cd frontend && npm run dev`
 
 ---
 
-## ▶️ Running
+## � Development Team
 
-### Docker (Recommended)
-```bash
-docker-compose up -d           # Start
-docker-compose logs -f         # Logs
-docker-compose down            # Stop
-```
-
-### Individual Services
-```bash
-cd services/user-service && npm start      # Terminal 1
-cd services/product-service && fastapi dev main.py  # Terminal 2
-cd services/order-service && mvn spring-boot:run    # Terminal 3
-cd api-gateway && npm start                  # Terminal 4
-cd frontend && npm run dev                   # Terminal 5
-```
+| Role | Developer | Focus |
+| :--- | :--- | :--- |
+| **Lead Engineer** | **Ayyoub Asri** | Microservices Architecture & Payments |
+| **Security Engineer** | **Missira Abba Boukar** | Auth & Identity Services |
+| **UI/UX Designer** | **Meryem Balili** | Frontend Experience |
 
 ---
 
-## 📡 API Endpoints
-
-**Base URL**: `http://localhost:3001/api`
-
-### Authentication
-```bash
-curl -X POST http://localhost:3001/api/auth/login \
-  -H "Content-Type: application/json" \
-  -d '{"email":"user@test.com","password":"Pass123!"}'
-```
-
-### Key Endpoints
-```
-Auth: POST /auth/login → JWT
-Products: GET /products, POST /products (admin)
-Orders: POST /orders, GET /orders (protected)
-Payments: POST /orders/:id/pay
-```
-
----
-
-## 🧪 Testing
-
-```bash
-cd services/product-service && pytest tests/ -v
-cd frontend && npm test
-```
-
-**Coverage**: 100% unit tests
-
----
-
-## 🐳 Deployment
-
-```bash
-docker-compose up -d  # Development
-```
-
-**Cloud**: AWS ECS | Kubernetes | Heroku
-
----
-
-## 👥 Team
-
-| Developer | Services |
-|-----------|----------|
-| **Ayyoub Asri** | Product, Order, Stripe |
-| **Missira Abba Boukar** | User, API Gateway |
-| **Meryem Balili** | Frontend |
-
-**Supervisor**: Leila Vaighan
-
----
-
-**🚀 Updated**: February 19, 2026
-```
-
-**✅ Fixed styling - Copy this entire block to `README.md`** 
-
-**Changes made for perfect GitHub preview:**
-- Removed outer markdown wrapper 
-- Consistent spacing after headers
-- Clean bullet list formatting
-- Proper code block spacing
-- Simplified overview section
-- Perfect table alignment 🎉
+<p align="center">
+  Built with ❤️ for the future of E-Commerce.
+</p>
