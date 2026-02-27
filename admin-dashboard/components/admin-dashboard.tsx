@@ -8,9 +8,10 @@ import ProductManagement from "./sections/product-management";
 import Collections from "./sections/collections";
 import Orders from "./sections/orders";
 import Settings from "./sections/settings";
+import Users from "./sections/users";
 import { translations, type Language } from "@/lib/translations";
 
-type TabType = "overview" | "products" | "collections" | "orders" | "settings";
+type TabType = "overview" | "products" | "collections" | "orders" | "users" | "settings";
 
 interface ThemeContextType {
   isDarkMode: boolean;
@@ -24,11 +25,11 @@ interface ThemeContextType {
 
 const ThemeContext = createContext<ThemeContextType>({
   isDarkMode: false,
-  toggleDarkMode: () => {},
+  toggleDarkMode: () => { },
   accentColor: "green",
-  setAccentColor: () => {},
+  setAccentColor: () => { },
   language: "en",
-  setLanguage: () => {},
+  setLanguage: () => { },
   t: (key) => key,
 });
 
@@ -40,6 +41,7 @@ interface AdminDashboardProps {
   categoriesData?: Array<{ id: number; name: string }>;
   collectionsData?: any[];
   ordersData?: any[];
+  usersData?: any[];
   onAddProduct?: (product: any) => void;
   onEditProduct?: (id: number) => void;
   onDeleteProduct?: (id: number) => void;
@@ -55,6 +57,7 @@ export default function AdminDashboard({
   categoriesData,
   collectionsData,
   ordersData,
+  usersData,
   onAddProduct,
   onEditProduct,
   onDeleteProduct,
@@ -62,7 +65,8 @@ export default function AdminDashboard({
   onEditCollection,
   onDeleteCollection,
   onViewOrder,
-}: AdminDashboardProps) {
+  onUpdateUserRole,
+}: AdminDashboardProps & { onUpdateUserRole?: (id: string, role: "customer" | "admin") => void }) {
   const [activeTab, setActiveTab] = useState<TabType>("overview");
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [isDarkMode, setIsDarkMode] = useState(false);
@@ -105,6 +109,8 @@ export default function AdminDashboard({
         );
       case "orders":
         return <Orders orders={ordersData} onViewOrder={onViewOrder} />;
+      case "users":
+        return <Users users={usersData} onUpdateRole={onUpdateUserRole!} />;
       case "settings":
         return <Settings />;
       default:

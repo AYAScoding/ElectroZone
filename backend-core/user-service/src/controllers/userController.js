@@ -14,7 +14,7 @@ const generateToken = (userId) => {
 // @route   POST /api/users/register
 // @access  Public
 const register = async (req, res) => {
-  const { email, password, name } = req.body;
+  const { email, password, name, role } = req.body;
 
   // Input validation
   if (!email || !password || !name) {
@@ -31,7 +31,7 @@ const register = async (req, res) => {
     }
 
     // Create and save new user
-    const user = new User({ email, password, name });
+    const user = new User({ email, password, name, role });
     await user.save();
 
     // Generate token
@@ -44,7 +44,9 @@ const register = async (req, res) => {
       user: {
         id: user._id,
         email: user.email,
-        name: user.name
+        name: user.name,
+        role: user.role,
+        createdAt: user.createdAt
       }
     });
   } catch (error) {
@@ -87,7 +89,9 @@ const login = async (req, res) => {
       user: {
         id: user._id,
         email: user.email,
-        name: user.name
+        name: user.name,
+        role: user.role,
+        createdAt: user.createdAt
       }
     });
   } catch (error) {
@@ -102,7 +106,13 @@ const login = async (req, res) => {
 const getProfile = async (req, res) => {
   // req.user is attached by authMiddleware
   try {
-    res.json(req.user);
+    res.json({
+      id: req.user._id,
+      email: req.user.email,
+      name: req.user.name,
+      role: req.user.role,
+      createdAt: req.user.createdAt
+    });
   } catch (error) {
     console.error('Profile fetch error:', error);
     res.status(500).json({ message: 'Server error', error: error.message });
@@ -136,9 +146,58 @@ const updatePreferences = async (req, res) => {
   }
 };
 
+// @desc    Get all users (admin only)
+// @route   GET /api/users
+// @access  Private/Admin
+const getAllUsers = async (req, res) => {
+  try {
+    const users = await User.find({}).select('-password');
+    res.json(users);
+  } catch (error) {
+    console.error('Fetch users error:', error);
+    res.status(500).json({ message: 'Server error', error: error.message });
+  }
+};
+
+// @desc    Update user role (admin only)
+// @route   PATCH /api/users/:id/role
+// @access  Private/Admin
+const updateUserRole = async (req, res) => {
+  try {
+    const { role } = req.body;
+
+    if (!role || !['customer', 'admin'].includes(role)) {
+      return res.status(400).json({ message: 'Invalid role provided' });
+    }
+
+    const user = await User.findById(req.params.id);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    user.role = role;
+    await user.save();
+
+    res.json({
+      message: 'User role updated successfully',
+      user: {
+        id: user._id,
+        email: user.email,
+        name: user.name,
+        role: user.role
+      }
+    });
+  } catch (error) {
+    console.error('Update role error:', error);
+    res.status(500).json({ message: 'Server error', error: error.message });
+  }
+};
+
 module.exports = {
   register,
   login,
   getProfile,
-  updatePreferences
+  updatePreferences,
+  getAllUsers,
+  updateUserRole
 };

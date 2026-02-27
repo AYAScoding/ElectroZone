@@ -12,6 +12,7 @@ import {
   getProducts,
   updateProduct,
 } from "@/lib/product-api";
+import { getAllUsers, updateUserRole, UserDto } from "@/lib/user-api";
 
 type DashboardState = {
   overview: any;
@@ -24,6 +25,7 @@ type DashboardState = {
   }>;
   collections: any[]; // we’ll reuse categories as collections
   orders: any[];
+  users: UserDto[];
   analytics: any[];
 };
 
@@ -34,6 +36,7 @@ export default function Home() {
     categories: [],
     collections: [],
     orders: [],
+    users: [],
     analytics: [],
   });
 
@@ -41,15 +44,22 @@ export default function Home() {
   const [error, setError] = useState<string | null>(null);
 
   const loadAll = async () => {
+    const token = typeof window !== "undefined" ? localStorage.getItem("admin-token") : null;
+    if (!token) {
+      window.location.href = "/login";
+      return;
+    }
+
     setLoading(true);
     setError(null);
 
     try {
-      const [categoriesRaw, productsRaw, ordersRaw] = await Promise.all([
+      const [categoriesRaw, productsRaw, ordersRaw, usersRaw] = await Promise.all([
         getCategories(),
         getProducts(),
         getAllOrders(),
-      ]); // [file:12][file:2]
+        getAllUsers(),
+      ]);
 
       const catNameById = new Map<number, string>(
         categoriesRaw.map((c) => [c.id, c.name])
@@ -115,6 +125,7 @@ export default function Home() {
         categories: categoriesUi,
         collections: categoriesUi, // reuse categories for Collections tab
         orders: ordersUi,
+        users: usersRaw,
       }));
     } catch (e: any) {
       console.error(e);
@@ -177,6 +188,16 @@ export default function Home() {
     [dashboardData.categories]
   );
 
+  const handleUpdateUserRole = async (id: string, role: "customer" | "admin") => {
+    try {
+      await updateUserRole(id, role);
+      await loadAll(); // refresh
+    } catch (e) {
+      console.error(e);
+      alert("Failed to update user role");
+    }
+  }
+
   return (
     <div>
       {loading && <div className="p-4 text-sm text-gray-500">Loading…</div>}
@@ -192,6 +213,7 @@ export default function Home() {
         categoriesData={categoriesForForm}
         collectionsData={dashboardData.collections}
         ordersData={dashboardData.orders}
+        usersData={dashboardData.users}
         onAddProduct={handleAddProduct}
         onEditProduct={handleEditProduct}
         onDeleteProduct={handleDeleteProduct}
@@ -199,6 +221,7 @@ export default function Home() {
         onEditCollection={handleEditCollection}
         onDeleteCollection={handleDeleteCollection}
         onViewOrder={handleViewOrder}
+        onUpdateUserRole={handleUpdateUserRole}
       />
     </div>
   );

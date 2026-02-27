@@ -112,10 +112,10 @@ export default function ProductDetailPage() {
 
       setLoading(true);
       try {
-        const baseUrl = process.env.NEXT_PUBLIC_API_URL;
+        const baseUrl = process.env.NEXT_PUBLIC_PRODUCT_API;
         if (!baseUrl) {
           throw new Error(
-            "NEXT_PUBLIC_API_URL is missing. Add it to .env.local"
+            "NEXT_PUBLIC_PRODUCT_API is missing. Add it to .env.local"
           );
         }
 
@@ -268,11 +268,10 @@ export default function ProductDetailPage() {
                   <button
                     key={index}
                     onClick={() => setSelectedImage(index)}
-                    className={`relative aspect-square overflow-hidden rounded-lg border-2 transition-colors ${
-                      selectedImage === index
+                    className={`relative aspect-square overflow-hidden rounded-lg border-2 transition-colors ${selectedImage === index
                         ? "border-primary"
                         : "border-transparent"
-                    }`}
+                      }`}
                   >
                     <Image
                       src={image || "/placeholder.svg"}
@@ -300,11 +299,10 @@ export default function ProductDetailPage() {
                     {Array.from({ length: 5 }).map((_, i) => (
                       <Star
                         key={i}
-                        className={`h-5 w-5 ${
-                          i < Math.floor(product.rating)
+                        className={`h-5 w-5 ${i < Math.floor(product.rating)
                             ? "fill-yellow-400 text-yellow-400"
                             : "fill-muted text-muted"
-                        }`}
+                          }`}
                       />
                     ))}
                   </div>
@@ -495,11 +493,10 @@ export default function ProductDetailPage() {
                             {Array.from({ length: 5 }).map((_, i) => (
                               <Star
                                 key={i}
-                                className={`h-4 w-4 ${
-                                  i < review.rating
+                                className={`h-4 w-4 ${i < review.rating
                                     ? "fill-yellow-400 text-yellow-400"
                                     : "fill-muted text-muted"
-                                }`}
+                                  }`}
                               />
                             ))}
                           </div>

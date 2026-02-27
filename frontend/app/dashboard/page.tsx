@@ -51,6 +51,15 @@ export default function DashboardPage() {
     },
   ]
 
+  if (user.role === 'admin') {
+    quickActions.unshift({
+      title: "Admin Panel",
+      description: "Manage store and users",
+      icon: User,
+      href: "http://localhost:3002"
+    })
+  }
+
   return (
     <div className="flex min-h-screen flex-col">
       <Header />

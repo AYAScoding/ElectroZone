@@ -3,6 +3,7 @@
 import Link from "next/link"
 import { Search, ShoppingCart, User, Sun, Moon, Globe, Palette } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
 import { useAuth } from "@/contexts/auth-context"
 import { useCart } from "@/contexts/cart-context"
@@ -172,8 +173,16 @@ export function Header() {
                   <div className="px-2 py-1.5">
                     <p className="text-sm font-medium">{user.name}</p>
                     <p className="text-xs text-muted-foreground">{user.email}</p>
+                    {user.role === 'admin' && (
+                      <Badge variant="outline" className="mt-1 text-xs">Admin</Badge>
+                    )}
                   </div>
                   <DropdownMenuSeparator />
+                  {user.role === 'admin' && (
+                    <DropdownMenuItem asChild>
+                      <a href="http://localhost:3002" className="font-semibold text-primary">Admin Dashboard</a>
+                    </DropdownMenuItem>
+                  )}
                   <DropdownMenuItem asChild>
                     <Link href="/dashboard">{t("dashboard")}</Link>
                   </DropdownMenuItem>

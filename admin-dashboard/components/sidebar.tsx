@@ -1,6 +1,6 @@
 "use client"
 
-import { BarChart3, Package, Grid3x3, ShoppingCart, Settings } from "lucide-react"
+import { BarChart3, Package, Grid3x3, ShoppingCart, Settings, User as UserIcon } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useTheme } from "./admin-dashboard"
 
@@ -62,6 +62,7 @@ export default function Sidebar({ activeTab, setActiveTab, isOpen }: SidebarProp
     { id: "products", label: t("products"), icon: Package },
     { id: "collections", label: t("collections"), icon: Grid3x3 },
     { id: "orders", label: t("orders"), icon: ShoppingCart },
+    { id: "users", label: "Users", icon: UserIcon },
     { id: "settings", label: t("settings"), icon: Settings },
   ]
 

@@ -81,9 +81,8 @@ export default function Header({ setSidebarOpen, sidebarOpen }: HeaderProps) {
 
   return (
     <div
-      className={`border-b px-6 py-4 flex items-center justify-between ${
-        isDarkMode ? "bg-gray-800 border-gray-700" : "bg-white border-gray-200"
-      }`}
+      className={`border-b px-6 py-4 flex items-center justify-between ${isDarkMode ? "bg-gray-800 border-gray-700" : "bg-white border-gray-200"
+        }`}
     >
       <button
         onClick={() => setSidebarOpen(!sidebarOpen)}
@@ -95,13 +94,21 @@ export default function Header({ setSidebarOpen, sidebarOpen }: HeaderProps) {
       <div className="flex-1" />
 
       <div className="flex items-center gap-2">
+        <a
+          href="http://localhost:3000"
+          className={`flex items-center gap-2 px-3 py-2 text-sm font-medium rounded-lg transition-colors border ${isDarkMode
+              ? "border-gray-600 text-gray-300 hover:bg-gray-700"
+              : "border-gray-300 text-gray-600 hover:bg-gray-50"
+            }`}
+        >
+          Back to Store
+        </a>
         <button
           onClick={toggleDarkMode}
-          className={`p-2 rounded-lg transition-colors ${
-            isDarkMode
+          className={`p-2 rounded-lg transition-colors ${isDarkMode
               ? "text-gray-300 hover:bg-gray-700 hover:text-yellow-400"
               : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
-          }`}
+            }`}
           title={isDarkMode ? "Switch to Light Mode" : "Switch to Dark Mode"}
         >
           {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
@@ -110,9 +117,8 @@ export default function Header({ setSidebarOpen, sidebarOpen }: HeaderProps) {
         <div className="relative">
           <button
             onClick={() => setShowColorMenu(!showColorMenu)}
-            className={`p-2 rounded-lg transition-colors ${
-              isDarkMode ? "text-gray-300 hover:bg-gray-700" : "text-gray-600 hover:bg-gray-100"
-            }`}
+            className={`p-2 rounded-lg transition-colors ${isDarkMode ? "text-gray-300 hover:bg-gray-700" : "text-gray-600 hover:bg-gray-100"
+              }`}
             title="Change Accent Color"
           >
             <Palette size={20} />
@@ -123,9 +129,8 @@ export default function Header({ setSidebarOpen, sidebarOpen }: HeaderProps) {
               <div className="fixed inset-0 z-40" onClick={() => setShowColorMenu(false)} />
 
               <div
-                className={`absolute right-0 mt-2 w-56 rounded-lg shadow-lg border z-50 p-4 ${
-                  isDarkMode ? "bg-gray-800 border-gray-700" : "bg-white border-gray-200"
-                }`}
+                className={`absolute right-0 mt-2 w-56 rounded-lg shadow-lg border z-50 p-4 ${isDarkMode ? "bg-gray-800 border-gray-700" : "bg-white border-gray-200"
+                  }`}
               >
                 <div className={`text-xs font-semibold mb-3 ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}>
                   Accent Color
@@ -135,11 +140,10 @@ export default function Header({ setSidebarOpen, sidebarOpen }: HeaderProps) {
                     <button
                       key={color.name}
                       onClick={() => handleColorChange(color.name)}
-                      className={`w-12 h-12 ${color.bg} rounded-lg transition-all ${color.hover} ${
-                        accentColor === color.name
+                      className={`w-12 h-12 ${color.bg} rounded-lg transition-all ${color.hover} ${accentColor === color.name
                           ? `ring-2 ring-offset-2 ${isDarkMode ? "ring-offset-gray-800" : "ring-offset-white"} ${color.ring}`
                           : ""
-                      }`}
+                        }`}
                       title={color.name.charAt(0).toUpperCase() + color.name.slice(1)}
                     />
                   ))}
@@ -155,9 +159,8 @@ export default function Header({ setSidebarOpen, sidebarOpen }: HeaderProps) {
         <div className="relative">
           <button
             onClick={() => setShowLanguageMenu(!showLanguageMenu)}
-            className={`flex items-center gap-2 px-3 py-2 rounded-lg transition-colors ${
-              isDarkMode ? "text-gray-300 hover:bg-gray-700" : "text-gray-600 hover:bg-gray-100"
-            }`}
+            className={`flex items-center gap-2 px-3 py-2 rounded-lg transition-colors ${isDarkMode ? "text-gray-300 hover:bg-gray-700" : "text-gray-600 hover:bg-gray-100"
+              }`}
             title="Change Language"
           >
             <Languages size={20} />
@@ -169,9 +172,8 @@ export default function Header({ setSidebarOpen, sidebarOpen }: HeaderProps) {
               <div className="fixed inset-0 z-40" onClick={() => setShowLanguageMenu(false)} />
 
               <div
-                className={`absolute right-0 mt-2 w-48 rounded-lg shadow-lg border z-50 ${
-                  isDarkMode ? "bg-gray-800 border-gray-700" : "bg-white border-gray-200"
-                }`}
+                className={`absolute right-0 mt-2 w-48 rounded-lg shadow-lg border z-50 ${isDarkMode ? "bg-gray-800 border-gray-700" : "bg-white border-gray-200"
+                  }`}
               >
                 <div
                   className={`px-3 py-2 border-b text-xs font-semibold ${isDarkMode ? "border-gray-700 text-gray-400" : "border-gray-200 text-gray-500"}`}
@@ -182,15 +184,14 @@ export default function Header({ setSidebarOpen, sidebarOpen }: HeaderProps) {
                   <button
                     key={lang.code}
                     onClick={() => handleLanguageChange(lang)}
-                    className={`w-full text-left px-4 py-2.5 text-sm transition-colors flex items-center justify-between last:rounded-b-lg ${
-                      language === lang.code
+                    className={`w-full text-left px-4 py-2.5 text-sm transition-colors flex items-center justify-between last:rounded-b-lg ${language === lang.code
                         ? isDarkMode
                           ? `${colors.active} text-white font-medium`
                           : `${colors.activeLight} font-medium`
                         : isDarkMode
                           ? "text-gray-300 hover:bg-gray-700"
                           : "text-gray-700 hover:bg-gray-50"
-                    }`}
+                      }`}
                   >
                     <span>{lang.name}</span>
                     {language === lang.code && <span className="text-xs">✓</span>}
@@ -209,9 +210,8 @@ export default function Header({ setSidebarOpen, sidebarOpen }: HeaderProps) {
         </button>
 
         <button
-          className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-colors ${
-            isDarkMode ? "text-gray-200 hover:bg-gray-700" : "text-gray-700 hover:bg-gray-100"
-          }`}
+          className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-colors ${isDarkMode ? "text-gray-200 hover:bg-gray-700" : "text-gray-700 hover:bg-gray-100"
+            }`}
         >
           <div
             className={`w-8 h-8 bg-gradient-to-br ${colors.gradient} rounded-full flex items-center justify-center text-white text-sm font-bold`}

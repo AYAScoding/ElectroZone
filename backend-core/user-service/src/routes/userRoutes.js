@@ -4,9 +4,12 @@ const {
   register,
   login,
   getProfile,
-  updatePreferences
+  updatePreferences,
+  getAllUsers,
+  updateUserRole
 } = require('../controllers/userController');
 const auth = require('../middleware/authMiddleware');
+const admin = require('../middleware/adminMiddleware');
 
 const router = express.Router();
 
@@ -18,5 +21,9 @@ router.post('/login', login);
 router.get('/profile', auth, getProfile);
 router.put('/profile', auth, updatePreferences);
 router.patch('/preferences', auth, updatePreferences);
+
+// Admin routes
+router.get('/', auth, admin, getAllUsers);
+router.patch('/:id/role', auth, admin, updateUserRole);
 
 module.exports = router;
