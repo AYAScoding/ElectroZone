@@ -3,11 +3,10 @@
 
 **ElectroZone** is a high-performance, professional e-commerce platform for high-end electronics. Built with a modern **microservices architecture**, it demonstrates seamless integration between different languages and frameworks, advanced security patterns, and premium user experiences.
 
-[![Status](https://img.shields.io/badge/Status-Live-success.svg)](#)
+[![Status](https://img.shields.io/badge/Status-Deployement_Ready-success.svg)](#)
 [![Version](https://img.shields.io/badge/Version-1.0.0-blue.svg)](#)
-[![License](https://img.shields.io/badge/License-MIT-gray.svg)](#)
 
----
+
 ---
 ## 🖼️ Gallery
 
@@ -94,21 +93,36 @@ graph TD
 
 ## 🚀 Getting Started
 
-### 1-Click Deployment (Docker)
+### 🐳 Backend Services (Docker)
+
+Each backend microservice runs inside its own Docker container.
+
+Start them individually:
+
 ```bash
-git clone https://github.com/AYAScoding/ElectroZone.git
-cd ElectroZone
-docker-compose up -d
+# User Service
+cd backend-core
+docker compose up --build
+
+# Product Service
+cd product-service
+docker compose up --build
+
+# Order Service
+cd order-service
+docker compose up --build
+
+# Admin Dashboard
+cd admin-dashboard
+npm install
+npm run dev
+
+# Frontend Store
+cd frontend
+npm install
+npm run dev
+
 ```
-*App will be available at [http://localhost:3000](http://localhost:3000)*
-
-### Manual Development Setup
-1. **User Service:** `cd user-service && npm run dev`
-2. **Product Service:** `cd product-service && uvicorn main:app`
-3. **Order Service:** `cd order-service && mvn spring-boot:run`
-4. **Admin Dashboard:** `cd admin-dashboard && npm run dev`
-5. **Frontend:** `cd frontend && npm run dev`
-
 ---
 
 ##  Development Team
