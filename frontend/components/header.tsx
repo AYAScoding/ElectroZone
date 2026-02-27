@@ -180,7 +180,7 @@ export function Header() {
                   <DropdownMenuSeparator />
                   {user.role === 'admin' && (
                     <DropdownMenuItem asChild>
-                      <a href="http://localhost:3002" className="font-semibold text-primary">Admin Dashboard</a>
+                      <a href="http://localhost:3001" className="font-semibold text-primary">Admin Dashboard</a>
                     </DropdownMenuItem>
                   )}
                   <DropdownMenuItem asChild>

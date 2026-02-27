@@ -58,3 +58,20 @@ export async function updateUserRole(id: string, role: "customer" | "admin"): Pr
     const data = await res.json();
     return data.user;
 }
+
+export async function deleteUser(id: string): Promise<void> {
+    const token = getToken();
+    if (!token) throw new Error("No admin token found. Please login.");
+
+    const res = await fetch(`${USER_API_URL}/${id}`, {
+        method: "DELETE",
+        headers: {
+            "Authorization": `Bearer ${token}`
+        }
+    });
+
+    if (!res.ok) {
+        const errorText = await res.text();
+        throw new Error(`DELETE /users/${id} failed: ${res.status} - ${errorText}`);
+    }
+}

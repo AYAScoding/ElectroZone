@@ -49,6 +49,7 @@ interface AdminDashboardProps {
   onEditCollection?: (id: number) => void;
   onDeleteCollection?: (id: number) => void;
   onViewOrder?: (id: string) => void;
+  onOrderStatusUpdate?: (id: string, newStatus: string) => void;
 }
 
 export default function AdminDashboard({
@@ -66,7 +67,12 @@ export default function AdminDashboard({
   onDeleteCollection,
   onViewOrder,
   onUpdateUserRole,
-}: AdminDashboardProps & { onUpdateUserRole?: (id: string, role: "customer" | "admin") => void }) {
+  onDeleteUser,
+  onOrderStatusUpdate,
+}: AdminDashboardProps & {
+  onUpdateUserRole?: (id: string, role: "customer" | "admin") => void,
+  onDeleteUser?: (id: string) => void
+}) {
   const [activeTab, setActiveTab] = useState<TabType>("overview");
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [isDarkMode, setIsDarkMode] = useState(false);
@@ -108,9 +114,9 @@ export default function AdminDashboard({
           />
         );
       case "orders":
-        return <Orders orders={ordersData} onViewOrder={onViewOrder} />;
+        return <Orders orders={ordersData} onViewOrder={onViewOrder} onStatusUpdate={onOrderStatusUpdate} />;
       case "users":
-        return <Users users={usersData} onUpdateRole={onUpdateUserRole!} />;
+        return <Users users={usersData} onUpdateRole={onUpdateUserRole!} onDeleteUser={onDeleteUser!} />;
       case "settings":
         return <Settings />;
       default:

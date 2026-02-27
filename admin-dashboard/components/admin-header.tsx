@@ -97,8 +97,8 @@ export default function Header({ setSidebarOpen, sidebarOpen }: HeaderProps) {
         <a
           href="http://localhost:3000"
           className={`flex items-center gap-2 px-3 py-2 text-sm font-medium rounded-lg transition-colors border ${isDarkMode
-              ? "border-gray-600 text-gray-300 hover:bg-gray-700"
-              : "border-gray-300 text-gray-600 hover:bg-gray-50"
+            ? "border-gray-600 text-gray-300 hover:bg-gray-700"
+            : "border-gray-300 text-gray-600 hover:bg-gray-50"
             }`}
         >
           Back to Store
@@ -106,8 +106,8 @@ export default function Header({ setSidebarOpen, sidebarOpen }: HeaderProps) {
         <button
           onClick={toggleDarkMode}
           className={`p-2 rounded-lg transition-colors ${isDarkMode
-              ? "text-gray-300 hover:bg-gray-700 hover:text-yellow-400"
-              : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
+            ? "text-gray-300 hover:bg-gray-700 hover:text-yellow-400"
+            : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
             }`}
           title={isDarkMode ? "Switch to Light Mode" : "Switch to Dark Mode"}
         >
@@ -141,8 +141,8 @@ export default function Header({ setSidebarOpen, sidebarOpen }: HeaderProps) {
                       key={color.name}
                       onClick={() => handleColorChange(color.name)}
                       className={`w-12 h-12 ${color.bg} rounded-lg transition-all ${color.hover} ${accentColor === color.name
-                          ? `ring-2 ring-offset-2 ${isDarkMode ? "ring-offset-gray-800" : "ring-offset-white"} ${color.ring}`
-                          : ""
+                        ? `ring-2 ring-offset-2 ${isDarkMode ? "ring-offset-gray-800" : "ring-offset-white"} ${color.ring}`
+                        : ""
                         }`}
                       title={color.name.charAt(0).toUpperCase() + color.name.slice(1)}
                     />
@@ -185,12 +185,12 @@ export default function Header({ setSidebarOpen, sidebarOpen }: HeaderProps) {
                     key={lang.code}
                     onClick={() => handleLanguageChange(lang)}
                     className={`w-full text-left px-4 py-2.5 text-sm transition-colors flex items-center justify-between last:rounded-b-lg ${language === lang.code
-                        ? isDarkMode
-                          ? `${colors.active} text-white font-medium`
-                          : `${colors.activeLight} font-medium`
-                        : isDarkMode
-                          ? "text-gray-300 hover:bg-gray-700"
-                          : "text-gray-700 hover:bg-gray-50"
+                      ? isDarkMode
+                        ? `${colors.active} text-white font-medium`
+                        : `${colors.activeLight} font-medium`
+                      : isDarkMode
+                        ? "text-gray-300 hover:bg-gray-700"
+                        : "text-gray-700 hover:bg-gray-50"
                       }`}
                   >
                     <span>{lang.name}</span>

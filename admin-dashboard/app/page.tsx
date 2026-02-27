@@ -12,7 +12,7 @@ import {
   getProducts,
   updateProduct,
 } from "@/lib/product-api";
-import { getAllUsers, updateUserRole, UserDto } from "@/lib/user-api";
+import { getAllUsers, updateUserRole, deleteUser, UserDto } from "@/lib/user-api";
 
 type DashboardState = {
   overview: any;
@@ -91,13 +91,26 @@ export default function Home() {
         status: Number(p.stock_quantity ?? 0) > 0 ? "Active" : "Out of Stock",
       })); // [file:12]
 
+      // Build lookup: userId (string) → user name
+      const userNameById = new Map<string, string>(
+        usersRaw.map((u: any) => [String(u._id), u.name || u.email || "Unknown"])
+      );
+
       const ordersUi = ordersRaw.map((o: any) => ({
         id: String(o.id),
-        customer: `User ${o.userId}`, // until user-service is integrated
+        customer: userNameById.get(String(o.userId)) ?? `User ${o.userId}`,
         amount: `$${Number(o.totalAmount ?? 0).toFixed(2)}`,
-        status: String(o.status ?? "Pending"),
+        status: String(o.status ?? "PENDING"),
         date: new Date(o.orderDate ?? Date.now()).toISOString().slice(0, 10),
-      })); // [file:2]
+        raw: {
+          userId: String(o.userId),
+          productId: o.productId,
+          quantity: o.quantity,
+          paymentStatus: o.paymentStatus ?? "",
+          paymentMethod: o.paymentMethod ?? "",
+          shippingAddress: o.shippingAddress ?? "",
+        },
+      }));
 
       const totalItems = productsUi.length;
       const totalOrders = ordersUi.length;
@@ -179,8 +192,17 @@ export default function Home() {
     await loadAll();
   };
 
-  const handleViewOrder = async (id: string) => {
-    alert(`Order id: ${id}`);
+  const handleViewOrder = async (_id: string) => {
+    // Handled inline by the Orders component panel
+  };
+
+  const handleOrderStatusUpdate = (id: string, newStatus: string) => {
+    setDashboardData((prev) => ({
+      ...prev,
+      orders: prev.orders.map((o: any) =>
+        String(o.id) === id ? { ...o, status: newStatus } : o
+      ),
+    }));
   };
 
   const categoriesForForm = useMemo(
@@ -195,6 +217,16 @@ export default function Home() {
     } catch (e) {
       console.error(e);
       alert("Failed to update user role");
+    }
+  }
+
+  const handleDeleteUser = async (id: string) => {
+    try {
+      await deleteUser(id);
+      await loadAll(); // refresh
+    } catch (e) {
+      console.error(e);
+      alert("Failed to delete user. Make sure you aren't deleting yourself.");
     }
   }
 
@@ -222,6 +254,8 @@ export default function Home() {
         onDeleteCollection={handleDeleteCollection}
         onViewOrder={handleViewOrder}
         onUpdateUserRole={handleUpdateUserRole}
+        onDeleteUser={handleDeleteUser}
+        onOrderStatusUpdate={handleOrderStatusUpdate}
       />
     </div>
   );

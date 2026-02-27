@@ -6,7 +6,8 @@ const {
   getProfile,
   updatePreferences,
   getAllUsers,
-  updateUserRole
+  updateUserRole,
+  deleteUser
 } = require('../controllers/userController');
 const auth = require('../middleware/authMiddleware');
 const admin = require('../middleware/adminMiddleware');
@@ -25,5 +26,6 @@ router.patch('/preferences', auth, updatePreferences);
 // Admin routes
 router.get('/', auth, admin, getAllUsers);
 router.patch('/:id/role', auth, admin, updateUserRole);
+router.delete('/:id', auth, admin, deleteUser);
 
 module.exports = router;

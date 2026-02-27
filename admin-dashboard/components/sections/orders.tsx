@@ -1,7 +1,9 @@
 "use client";
 
-import { Eye } from "lucide-react";
+import { useState } from "react";
+import { Eye, X, Package, User, CreditCard, MapPin, Calendar, Hash } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { updateOrderStatus, ORDER_STATUSES } from "@/lib/order-api";
 
 interface Order {
   id: string;
@@ -9,58 +11,86 @@ interface Order {
   amount: string;
   status: string;
   date: string;
+  // extra fields passed from page.tsx (raw order data)
+  raw?: {
+    userId: string;
+    productId: string | number;
+    quantity: number;
+    paymentStatus: string;
+    paymentMethod: string;
+    shippingAddress: string;
+  };
 }
 
 interface OrdersProps {
   orders?: Order[];
   onViewOrder?: (id: string) => void;
+  onStatusUpdate?: (id: string, newStatus: string) => void;
 }
 
-export default function Orders({ orders = [], onViewOrder }: OrdersProps) {
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case "Delivered":
-        return "bg-green-100 text-green-700";
-      case "Shipped":
-        return "bg-blue-100 text-blue-700";
-      case "Processing":
-        return "bg-yellow-100 text-yellow-700";
-      case "Pending":
-        return "bg-gray-100 text-gray-700";
-      default:
-        return "bg-gray-100 text-gray-700";
+const STATUS_LABELS: Record<string, string> = {
+  PENDING: "Pending",
+  PROCESSING: "Processing",
+  SHIPPED: "Shipped",
+  DELIVERED: "Delivered",
+  CANCELLED: "Cancelled",
+};
+
+const STATUS_COLORS: Record<string, string> = {
+  DELIVERED: "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400",
+  SHIPPED: "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400",
+  PROCESSING: "bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400",
+  PENDING: "bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300",
+  CANCELLED: "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400",
+};
+
+function StatusBadge({ status }: { status: string }) {
+  const cls = STATUS_COLORS[status.toUpperCase()] ?? STATUS_COLORS.PENDING;
+  return (
+    <span className={`px-3 py-1 rounded-full text-xs font-semibold uppercase ${cls}`}>
+      {STATUS_LABELS[status.toUpperCase()] ?? status}
+    </span>
+  );
+}
+
+export default function Orders({ orders = [], onStatusUpdate }: OrdersProps) {
+  const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
+  const [updatingStatus, setUpdatingStatus] = useState(false);
+  const [statusError, setStatusError] = useState<string | null>(null);
+
+  const handleStatusChange = async (newStatus: string) => {
+    if (!selectedOrder) return;
+    setUpdatingStatus(true);
+    setStatusError(null);
+    try {
+      await updateOrderStatus(selectedOrder.id, newStatus);
+      // Optimistically update local state
+      const updated = { ...selectedOrder, status: newStatus };
+      setSelectedOrder(updated);
+      onStatusUpdate?.(selectedOrder.id, newStatus);
+    } catch (e: any) {
+      setStatusError("Failed to update status: " + e.message);
+    } finally {
+      setUpdatingStatus(false);
     }
   };
 
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold text-gray-900">Orders</h1>
-        <p className="text-gray-600">Track and manage customer orders</p>
+        <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Orders</h1>
+        <p className="text-gray-600 dark:text-gray-400">Track and manage customer orders</p>
       </div>
 
-      <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
+      <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden shadow-sm">
         <table className="w-full">
-          <thead className="bg-gray-50 border-b border-gray-200">
+          <thead className="bg-gray-50 dark:bg-gray-900/50 border-b border-gray-200 dark:border-gray-700">
             <tr>
-              <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">
-                Order ID
-              </th>
-              <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">
-                Customer
-              </th>
-              <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">
-                Amount
-              </th>
-              <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">
-                Status
-              </th>
-              <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">
-                Date
-              </th>
-              <th className="px-6 py-3 text-center text-sm font-semibold text-gray-700">
-                Action
-              </th>
+              {["Order ID", "Customer", "Amount", "Status", "Date", "Action"].map((h) => (
+                <th key={h} className="px-6 py-3 text-left text-sm font-semibold text-gray-700 dark:text-gray-300">
+                  {h}
+                </th>
+              ))}
             </tr>
           </thead>
           <tbody>
@@ -74,32 +104,16 @@ export default function Orders({ orders = [], onViewOrder }: OrdersProps) {
               orders.map((order) => (
                 <tr
                   key={order.id}
-                  className="border-b border-gray-200 hover:bg-gray-50 transition-colors"
+                  className="border-b border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/40 transition-colors"
                 >
-                  <td className="px-6 py-4 text-sm font-semibold text-gray-900">
-                    {order.id}
-                  </td>
-                  <td className="px-6 py-4 text-sm text-gray-600">
-                    {order.customer}
-                  </td>
-                  <td className="px-6 py-4 text-sm text-gray-900 font-semibold">
-                    {order.amount}
-                  </td>
-                  <td className="px-6 py-4 text-sm">
-                    <span
-                      className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusColor(
-                        order.status
-                      )}`}
-                    >
-                      {order.status}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 text-sm text-gray-600">
-                    {order.date}
-                  </td>
-                  <td className="px-6 py-4 text-center">
+                  <td className="px-6 py-4 text-sm font-semibold text-gray-900 dark:text-white">#{order.id}</td>
+                  <td className="px-6 py-4 text-sm text-gray-600 dark:text-gray-300">{order.customer}</td>
+                  <td className="px-6 py-4 text-sm font-semibold text-gray-900 dark:text-white">{order.amount}</td>
+                  <td className="px-6 py-4 text-sm"><StatusBadge status={order.status} /></td>
+                  <td className="px-6 py-4 text-sm text-gray-600 dark:text-gray-400">{order.date}</td>
+                  <td className="px-6 py-4">
                     <Button
-                      onClick={() => onViewOrder?.(order.id)}
+                      onClick={() => { setSelectedOrder(order); setStatusError(null); }}
                       variant="ghost"
                       size="sm"
                       className="text-green-600 hover:text-green-700 gap-2"
@@ -114,6 +128,119 @@ export default function Orders({ orders = [], onViewOrder }: OrdersProps) {
           </tbody>
         </table>
       </div>
+
+      {/* ─── Slide-in detail panel ─── */}
+      {selectedOrder && (
+        <>
+          {/* Backdrop */}
+          <div
+            className="fixed inset-0 bg-black/40 backdrop-blur-sm z-40"
+            onClick={() => setSelectedOrder(null)}
+          />
+          {/* Panel */}
+          <div className="fixed right-0 top-0 h-full w-full max-w-md bg-white dark:bg-gray-900 shadow-2xl z-50 flex flex-col">
+            {/* Header */}
+            <div className="flex items-center justify-between px-6 py-5 border-b border-gray-200 dark:border-gray-700">
+              <div>
+                <h2 className="text-xl font-bold text-gray-900 dark:text-white">Order #{selectedOrder.id}</h2>
+                <p className="text-sm text-gray-500 dark:text-gray-400">{selectedOrder.date}</p>
+              </div>
+              <button
+                onClick={() => setSelectedOrder(null)}
+                className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-500 transition-colors"
+              >
+                <X size={20} />
+              </button>
+            </div>
+
+            {/* Body */}
+            <div className="flex-1 overflow-y-auto p-6 space-y-6">
+              {/* Customer */}
+              <div className="flex items-start gap-3">
+                <div className="p-2 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+                  <User size={18} className="text-blue-600 dark:text-blue-400" />
+                </div>
+                <div>
+                  <p className="text-xs text-gray-500 dark:text-gray-400 font-medium uppercase tracking-wide">Customer</p>
+                  <p className="text-sm font-semibold text-gray-900 dark:text-white">{selectedOrder.customer}</p>
+                </div>
+              </div>
+
+              {/* Amount */}
+              <div className="flex items-start gap-3">
+                <div className="p-2 bg-green-50 dark:bg-green-900/20 rounded-lg">
+                  <CreditCard size={18} className="text-green-600 dark:text-green-400" />
+                </div>
+                <div>
+                  <p className="text-xs text-gray-500 dark:text-gray-400 font-medium uppercase tracking-wide">Order Total</p>
+                  <p className="text-lg font-bold text-gray-900 dark:text-white">{selectedOrder.amount}</p>
+                </div>
+              </div>
+
+              {/* Product & Quantity */}
+              {selectedOrder.raw && (
+                <>
+                  <div className="flex items-start gap-3">
+                    <div className="p-2 bg-purple-50 dark:bg-purple-900/20 rounded-lg">
+                      <Package size={18} className="text-purple-600 dark:text-purple-400" />
+                    </div>
+                    <div>
+                      <p className="text-xs text-gray-500 dark:text-gray-400 font-medium uppercase tracking-wide">Product</p>
+                      <p className="text-sm font-semibold text-gray-900 dark:text-white">Product #{selectedOrder.raw.productId}</p>
+                      <p className="text-xs text-gray-500 dark:text-gray-400">Qty: {selectedOrder.raw.quantity}</p>
+                    </div>
+                  </div>
+
+                  {selectedOrder.raw.shippingAddress && (
+                    <div className="flex items-start gap-3">
+                      <div className="p-2 bg-orange-50 dark:bg-orange-900/20 rounded-lg">
+                        <MapPin size={18} className="text-orange-600 dark:text-orange-400" />
+                      </div>
+                      <div>
+                        <p className="text-xs text-gray-500 dark:text-gray-400 font-medium uppercase tracking-wide">Shipping Address</p>
+                        <p className="text-sm font-semibold text-gray-900 dark:text-white">{selectedOrder.raw.shippingAddress}</p>
+                      </div>
+                    </div>
+                  )}
+
+                  <div className="flex items-start gap-3">
+                    <div className="p-2 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                      <Hash size={18} className="text-gray-600 dark:text-gray-400" />
+                    </div>
+                    <div>
+                      <p className="text-xs text-gray-500 dark:text-gray-400 font-medium uppercase tracking-wide">Payment</p>
+                      <p className="text-sm font-semibold text-gray-900 dark:text-white capitalize">{selectedOrder.raw.paymentMethod || "—"}</p>
+                      <p className="text-xs text-gray-500 dark:text-gray-400">Status: {selectedOrder.raw.paymentStatus || "—"}</p>
+                    </div>
+                  </div>
+                </>
+              )}
+
+              {/* ── Status Change ── */}
+              <div className="rounded-xl border border-gray-200 dark:border-gray-700 p-4 bg-gray-50 dark:bg-gray-800 space-y-3">
+                <p className="text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wide">Update Order Status</p>
+                <div className="flex items-center gap-2">
+                  <StatusBadge status={selectedOrder.status} />
+                  <span className="text-gray-400 dark:text-gray-500 text-xs">→</span>
+                  <select
+                    className="flex-1 text-sm rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-900 dark:text-white px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-green-500"
+                    defaultValue=""
+                    onChange={(e) => { if (e.target.value) handleStatusChange(e.target.value); e.target.value = ""; }}
+                    disabled={updatingStatus}
+                  >
+                    <option value="">— Change to —</option>
+                    {ORDER_STATUSES.filter((s) => s !== selectedOrder.status.toUpperCase()).map((s) => (
+                      <option key={s} value={s}>{STATUS_LABELS[s]}</option>
+                    ))}
+                  </select>
+                </div>
+                {updatingStatus && <p className="text-xs text-blue-500">Updating…</p>}
+                {statusError && <p className="text-xs text-red-500">{statusError}</p>}
+              </div>
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 }

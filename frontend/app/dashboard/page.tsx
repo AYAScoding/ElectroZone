@@ -56,7 +56,7 @@ export default function DashboardPage() {
       title: "Admin Panel",
       description: "Manage store and users",
       icon: User,
-      href: "http://localhost:3002"
+      href: "http://localhost:3001"
     })
   }
 
