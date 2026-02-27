@@ -78,16 +78,16 @@ export default function Orders({ orders = [], onStatusUpdate }: OrdersProps) {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Orders</h1>
-        <p className="text-gray-600 dark:text-gray-400">Track and manage customer orders</p>
+        <h1 className="text-3xl font-bold text-foreground">Orders</h1>
+        <p className="text-muted-foreground">Track and manage customer orders</p>
       </div>
 
-      <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden shadow-sm">
+      <div className="bg-card rounded-xl border border-border overflow-hidden shadow-sm">
         <table className="w-full">
-          <thead className="bg-gray-50 dark:bg-gray-900/50 border-b border-gray-200 dark:border-gray-700">
+          <thead className="bg-muted/50 border-b border-border">
             <tr>
               {["Order ID", "Customer", "Amount", "Status", "Date", "Action"].map((h) => (
-                <th key={h} className="px-6 py-3 text-left text-sm font-semibold text-gray-700 dark:text-gray-300">
+                <th key={h} className="px-6 py-3 text-left text-sm font-semibold text-foreground/70">
                   {h}
                 </th>
               ))}
@@ -104,13 +104,13 @@ export default function Orders({ orders = [], onStatusUpdate }: OrdersProps) {
               orders.map((order) => (
                 <tr
                   key={order.id}
-                  className="border-b border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/40 transition-colors"
+                  className="border-b border-border hover:bg-muted/30 transition-colors"
                 >
-                  <td className="px-6 py-4 text-sm font-semibold text-gray-900 dark:text-white">#{order.id}</td>
-                  <td className="px-6 py-4 text-sm text-gray-600 dark:text-gray-300">{order.customer}</td>
-                  <td className="px-6 py-4 text-sm font-semibold text-gray-900 dark:text-white">{order.amount}</td>
+                  <td className="px-6 py-4 text-sm font-semibold text-foreground">#{order.id}</td>
+                  <td className="px-6 py-4 text-sm text-muted-foreground">{order.customer}</td>
+                  <td className="px-6 py-4 text-sm font-semibold text-foreground">{order.amount}</td>
                   <td className="px-6 py-4 text-sm"><StatusBadge status={order.status} /></td>
-                  <td className="px-6 py-4 text-sm text-gray-600 dark:text-gray-400">{order.date}</td>
+                  <td className="px-6 py-4 text-sm text-muted-foreground">{order.date}</td>
                   <td className="px-6 py-4">
                     <Button
                       onClick={() => { setSelectedOrder(order); setStatusError(null); }}
@@ -138,16 +138,16 @@ export default function Orders({ orders = [], onStatusUpdate }: OrdersProps) {
             onClick={() => setSelectedOrder(null)}
           />
           {/* Panel */}
-          <div className="fixed right-0 top-0 h-full w-full max-w-md bg-white dark:bg-gray-900 shadow-2xl z-50 flex flex-col">
+          <div className="fixed right-0 top-0 h-full w-full max-w-md bg-card shadow-2xl z-50 flex flex-col border-l border-border">
             {/* Header */}
             <div className="flex items-center justify-between px-6 py-5 border-b border-gray-200 dark:border-gray-700">
               <div>
-                <h2 className="text-xl font-bold text-gray-900 dark:text-white">Order #{selectedOrder.id}</h2>
-                <p className="text-sm text-gray-500 dark:text-gray-400">{selectedOrder.date}</p>
+                <h2 className="text-xl font-bold text-foreground">Order #{selectedOrder.id}</h2>
+                <p className="text-sm text-muted-foreground">{selectedOrder.date}</p>
               </div>
               <button
                 onClick={() => setSelectedOrder(null)}
-                className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-500 transition-colors"
+                className="p-2 rounded-lg hover:bg-muted text-muted-foreground transition-colors"
               >
                 <X size={20} />
               </button>
@@ -161,8 +161,8 @@ export default function Orders({ orders = [], onStatusUpdate }: OrdersProps) {
                   <User size={18} className="text-blue-600 dark:text-blue-400" />
                 </div>
                 <div>
-                  <p className="text-xs text-gray-500 dark:text-gray-400 font-medium uppercase tracking-wide">Customer</p>
-                  <p className="text-sm font-semibold text-gray-900 dark:text-white">{selectedOrder.customer}</p>
+                  <p className="text-xs text-muted-foreground font-medium uppercase tracking-wide">Customer</p>
+                  <p className="text-sm font-semibold text-foreground">{selectedOrder.customer}</p>
                 </div>
               </div>
 
@@ -172,8 +172,8 @@ export default function Orders({ orders = [], onStatusUpdate }: OrdersProps) {
                   <CreditCard size={18} className="text-green-600 dark:text-green-400" />
                 </div>
                 <div>
-                  <p className="text-xs text-gray-500 dark:text-gray-400 font-medium uppercase tracking-wide">Order Total</p>
-                  <p className="text-lg font-bold text-gray-900 dark:text-white">{selectedOrder.amount}</p>
+                  <p className="text-xs text-muted-foreground font-medium uppercase tracking-wide">Order Total</p>
+                  <p className="text-lg font-bold text-foreground">{selectedOrder.amount}</p>
                 </div>
               </div>
 
@@ -185,10 +185,10 @@ export default function Orders({ orders = [], onStatusUpdate }: OrdersProps) {
                       <Package size={18} className="text-purple-600 dark:text-purple-400" />
                     </div>
                     <div>
-                      <p className="text-xs text-gray-500 dark:text-gray-400 font-medium uppercase tracking-wide">Product</p>
-                      <p className="text-sm font-semibold text-gray-900 dark:text-white">Product #{selectedOrder.raw.productId}</p>
-                      <p className="text-xs text-gray-500 dark:text-gray-400">Qty: {selectedOrder.raw.quantity}</p>
-                    </div>
+                      <p className="text-xs text-muted-foreground font-medium uppercase tracking-wide">Product</p>
+                      <p className="text-sm font-semibold text-foreground">Product #{selectedOrder.raw.productId}</p>
+                      <p className="text-xs text-muted-foreground">Qty: {selectedOrder.raw.quantity}</p>
+                      streams                    </div>
                   </div>
 
                   {selectedOrder.raw.shippingAddress && (
@@ -197,33 +197,33 @@ export default function Orders({ orders = [], onStatusUpdate }: OrdersProps) {
                         <MapPin size={18} className="text-orange-600 dark:text-orange-400" />
                       </div>
                       <div>
-                        <p className="text-xs text-gray-500 dark:text-gray-400 font-medium uppercase tracking-wide">Shipping Address</p>
-                        <p className="text-sm font-semibold text-gray-900 dark:text-white">{selectedOrder.raw.shippingAddress}</p>
+                        <p className="text-xs text-muted-foreground font-medium uppercase tracking-wide">Shipping Address</p>
+                        <p className="text-sm font-semibold text-foreground">{selectedOrder.raw.shippingAddress}</p>
                       </div>
                     </div>
                   )}
 
                   <div className="flex items-start gap-3">
-                    <div className="p-2 bg-gray-50 dark:bg-gray-800 rounded-lg">
-                      <Hash size={18} className="text-gray-600 dark:text-gray-400" />
+                    <div className="p-2 bg-muted rounded-lg">
+                      <Hash size={18} className="text-muted-foreground" />
                     </div>
                     <div>
-                      <p className="text-xs text-gray-500 dark:text-gray-400 font-medium uppercase tracking-wide">Payment</p>
-                      <p className="text-sm font-semibold text-gray-900 dark:text-white capitalize">{selectedOrder.raw.paymentMethod || "—"}</p>
-                      <p className="text-xs text-gray-500 dark:text-gray-400">Status: {selectedOrder.raw.paymentStatus || "—"}</p>
+                      <p className="text-xs text-muted-foreground font-medium uppercase tracking-wide">Payment</p>
+                      <p className="text-sm font-semibold text-foreground capitalize">{selectedOrder.raw.paymentMethod || "—"}</p>
+                      <p className="text-xs text-muted-foreground">Status: {selectedOrder.raw.paymentStatus || "—"}</p>
                     </div>
                   </div>
                 </>
               )}
 
               {/* ── Status Change ── */}
-              <div className="rounded-xl border border-gray-200 dark:border-gray-700 p-4 bg-gray-50 dark:bg-gray-800 space-y-3">
-                <p className="text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wide">Update Order Status</p>
+              <div className="rounded-xl border border-border p-4 bg-muted/50 space-y-3">
+                <p className="text-xs font-semibold text-foreground/70 uppercase tracking-wide">Update Order Status</p>
                 <div className="flex items-center gap-2">
                   <StatusBadge status={selectedOrder.status} />
                   <span className="text-gray-400 dark:text-gray-500 text-xs">→</span>
                   <select
-                    className="flex-1 text-sm rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-900 dark:text-white px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-green-500"
+                    className="flex-1 text-sm rounded-lg border border-border bg-card text-foreground px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-primary"
                     defaultValue=""
                     onChange={(e) => { if (e.target.value) handleStatusChange(e.target.value); e.target.value = ""; }}
                     disabled={updatingStatus}

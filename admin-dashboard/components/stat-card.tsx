@@ -21,11 +21,11 @@ const colorClasses = {
 
 export default function StatCard({ label, value, change, icon: Icon, trend, color }: StatCardProps) {
   return (
-    <div className="bg-white rounded-lg border border-gray-200 p-6 hover:shadow-lg transition-shadow">
+    <div className="bg-card rounded-lg border border-border p-6 hover:shadow-lg transition-shadow">
       <div className="flex items-start justify-between">
         <div>
-          <p className="text-gray-600 text-sm font-medium">{label}</p>
-          <p className="text-2xl font-bold text-gray-900 mt-2">{value}</p>
+          <p className="text-muted-foreground text-sm font-medium">{label}</p>
+          <p className="text-2xl font-bold text-foreground mt-2">{value}</p>
           <div className="flex items-center gap-1 mt-3">
             {trend === "up" ? (
               <TrendingUp size={16} className="text-green-600" />

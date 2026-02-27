@@ -143,7 +143,7 @@ export default function AdminDashboard({
       }}
     >
       <div
-        className={`flex h-screen ${isDarkMode ? "bg-gray-900" : "bg-gray-50"}`}
+        className={`flex h-screen ${isDarkMode ? "dark bg-background text-foreground" : "bg-gray-50"}`}
       >
         <Sidebar
           activeTab={activeTab}

@@ -102,14 +102,10 @@ export default function ProductManagement({
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1
-            className={`text-3xl font-bold ${
-              isDarkMode ? "text-white" : "text-gray-900"
-            }`}
-          >
+          <h1 className="text-3xl font-bold text-foreground">
             {t("productManagement")}
           </h1>
-          <p className={isDarkMode ? "text-gray-400" : "text-gray-600"}>
+          <p className="text-muted-foreground">
             Add, edit, and manage your product inventory
           </p>
         </div>
@@ -134,10 +130,10 @@ export default function ProductManagement({
           initial={
             editing
               ? {
-                  id: editing.id,
-                  name: editing.name,
-                  // These fields aren’t in the table model; the parent edit handler will fetch by id later if you want.
-                }
+                id: editing.id,
+                name: editing.name,
+                // These fields aren’t in the table model; the parent edit handler will fetch by id later if you want.
+              }
               : null
           }
           onClose={() => setShowForm(false)}
@@ -150,73 +146,51 @@ export default function ProductManagement({
           <Search size={18} className="absolute left-3 top-3 text-gray-400" />
           <Input
             placeholder={t("searchProducts")}
-            className={`pl-10 ${
-              isDarkMode ? "bg-gray-800 border-gray-700 text-white" : ""
-            }`}
+            className={`pl-10 ${isDarkMode ? "bg-gray-800 border-gray-700 text-white" : ""
+              }`}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
         </div>
       </div>
 
-      <div
-        className={`bg-white rounded-lg border border-gray-200 overflow-hidden ${
-          isDarkMode ? "bg-gray-800 border-gray-700" : ""
-        }`}
-      >
+      <div className="bg-card rounded-lg border border-border overflow-hidden">
         <table className="w-full">
-          <thead
-            className={`bg-gray-50 border-b border-gray-200 ${
-              isDarkMode ? "bg-gray-900 border-gray-700" : ""
-            }`}
-          >
+          <thead className="bg-muted/50 border-b border-border">
             <tr>
               <th
-                className={`px-6 py-3 text-left text-sm font-semibold ${
-                  isDarkMode ? "text-gray-300" : "text-gray-700"
-                }`}
+                className="px-6 py-3 text-left text-sm font-semibold text-foreground/70"
               >
                 {t("name")}
               </th>
               <th
-                className={`px-6 py-3 text-left text-sm font-semibold ${
-                  isDarkMode ? "text-gray-300" : "text-gray-700"
-                }`}
+                className="px-6 py-3 text-left text-sm font-semibold text-foreground/70"
               >
                 {t("sku")}
               </th>
               <th
-                className={`px-6 py-3 text-left text-sm font-semibold ${
-                  isDarkMode ? "text-gray-300" : "text-gray-700"
-                }`}
+                className="px-6 py-3 text-left text-sm font-semibold text-foreground/70"
               >
                 {t("price")}
               </th>
               <th
-                className={`px-6 py-3 text-left text-sm font-semibold ${
-                  isDarkMode ? "text-gray-300" : "text-gray-700"
-                }`}
+                className="px-6 py-3 text-left text-sm font-semibold text-foreground/70"
               >
                 {t("stock")}
               </th>
               <th
-                className={`px-6 py-3 text-left text-sm font-semibold ${
-                  isDarkMode ? "text-gray-300" : "text-gray-700"
-                }`}
+                className="px-6 py-3 text-left text-sm font-semibold text-foreground/70"
               >
                 {t("category")}
               </th>
               <th
-                className={`px-6 py-3 text-left text-sm font-semibold ${
-                  isDarkMode ? "text-gray-300" : "text-gray-700"
-                }`}
+                className="px-6 py-3 text-left text-sm font-semibold text-foreground/70"
               >
                 {t("status")}
               </th>
               <th
-                className={`px-6 py-3 text-center text-sm font-semibold ${
-                  isDarkMode ? "text-gray-300" : "text-gray-700"
-                }`}
+                className={`px-6 py-3 text-center text-sm font-semibold ${isDarkMode ? "text-gray-300" : "text-gray-700"
+                  }`}
               >
                 {t("actions")}
               </th>
@@ -228,9 +202,8 @@ export default function ProductManagement({
               <tr>
                 <td
                   colSpan={7}
-                  className={`px-6 py-8 text-center ${
-                    isDarkMode ? "text-gray-400" : "text-gray-500"
-                  }`}
+                  className={`px-6 py-8 text-center ${isDarkMode ? "text-gray-400" : "text-gray-500"
+                    }`}
                 >
                   {t("noProducts")}
                 </td>
@@ -239,37 +212,29 @@ export default function ProductManagement({
               filteredProducts.map((p) => (
                 <tr
                   key={p.id}
-                  className={`border-b transition-colors ${
-                    isDarkMode
-                      ? "border-gray-700 hover:bg-gray-700"
-                      : "border-gray-200 hover:bg-gray-50"
-                  }`}
+                  className="border-b border-border transition-colors hover:bg-muted/30"
                 >
                   <td
-                    className={`px-6 py-4 text-sm font-medium ${
-                      isDarkMode ? "text-white" : "text-gray-900"
-                    }`}
+                    className={`px-6 py-4 text-sm font-medium ${isDarkMode ? "text-white" : "text-gray-900"
+                      }`}
                   >
                     {p.name}
                   </td>
                   <td
-                    className={`px-6 py-4 text-sm ${
-                      isDarkMode ? "text-gray-400" : "text-gray-600"
-                    }`}
+                    className={`px-6 py-4 text-sm ${isDarkMode ? "text-gray-400" : "text-gray-600"
+                      }`}
                   >
                     {p.sku}
                   </td>
                   <td
-                    className={`px-6 py-4 text-sm font-semibold ${
-                      isDarkMode ? "text-white" : "text-gray-900"
-                    }`}
+                    className={`px-6 py-4 text-sm font-semibold ${isDarkMode ? "text-white" : "text-gray-900"
+                      }`}
                   >
                     {p.price}
                   </td>
                   <td
-                    className={`px-6 py-4 text-sm ${
-                      isDarkMode ? "text-gray-400" : "text-gray-600"
-                    }`}
+                    className={`px-6 py-4 text-sm ${isDarkMode ? "text-gray-400" : "text-gray-600"
+                      }`}
                   >
                     {p.stock}
                   </td>
@@ -280,11 +245,10 @@ export default function ProductManagement({
                   </td>
                   <td className="px-6 py-4 text-sm">
                     <span
-                      className={`px-2 py-1 rounded-full text-xs font-medium ${
-                        p.status === "Active"
-                          ? "bg-green-100 text-green-700"
-                          : "bg-red-100 text-red-700"
-                      }`}
+                      className={`px-2 py-1 rounded-full text-xs font-medium ${p.status === "Active"
+                        ? "bg-green-100 text-green-700"
+                        : "bg-red-100 text-red-700"
+                        }`}
                     >
                       {p.status}
                     </span>
@@ -294,11 +258,10 @@ export default function ProductManagement({
                     <div className="flex items-center justify-center gap-2">
                       <button
                         onClick={() => openEdit(p)}
-                        className={`p-2 rounded-lg transition-colors ${
-                          isDarkMode
-                            ? "hover:bg-gray-600 text-gray-400 hover:text-white"
-                            : "hover:bg-gray-200 text-gray-600 hover:text-gray-900"
-                        }`}
+                        className={`p-2 rounded-lg transition-colors ${isDarkMode
+                          ? "hover:bg-gray-600 text-gray-400 hover:text-white"
+                          : "hover:bg-gray-200 text-gray-600 hover:text-gray-900"
+                          }`}
                       >
                         <Edit2 size={16} />
                       </button>
@@ -306,13 +269,11 @@ export default function ProductManagement({
                       <button
                         disabled={busyId === p.id}
                         onClick={() => handleDelete(p.id)}
-                        className={`p-2 rounded-lg transition-colors ${
-                          isDarkMode
-                            ? "hover:bg-red-900 text-gray-400 hover:text-red-400"
-                            : "hover:bg-red-100 text-gray-600 hover:text-red-600"
-                        } ${
-                          busyId === p.id ? "opacity-50 cursor-not-allowed" : ""
-                        }`}
+                        className={`p-2 rounded-lg transition-colors ${isDarkMode
+                          ? "hover:bg-red-900 text-gray-400 hover:text-red-400"
+                          : "hover:bg-red-100 text-gray-600 hover:text-red-600"
+                          } ${busyId === p.id ? "opacity-50 cursor-not-allowed" : ""
+                          }`}
                       >
                         <Trash2 size={16} />
                       </button>

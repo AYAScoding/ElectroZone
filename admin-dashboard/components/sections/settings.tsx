@@ -15,46 +15,42 @@ export default function Settings() {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className={`text-3xl font-bold ${isDarkMode ? "text-white" : "text-gray-900"}`}>Settings</h1>
-        <p className={`${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
+        <h1 className="text-3xl font-bold text-foreground">Settings</h1>
+        <p className="text-muted-foreground">
           Manage your store configuration and preferences
         </p>
       </div>
 
       {/* Store Settings */}
       <div
-        className={`${isDarkMode ? "bg-gray-800 border-gray-700" : "bg-white border-gray-200"} rounded-lg border p-6`}
+        className="bg-card rounded-lg border border-border p-6"
       >
-        <h2 className={`text-xl font-bold ${isDarkMode ? "text-white" : "text-gray-900"} mb-4`}>Store Information</h2>
+        <h2 className="text-xl font-bold text-foreground mb-4">Store Information</h2>
         <div className="space-y-4">
           <div>
-            <label className={`block text-sm font-medium ${isDarkMode ? "text-gray-300" : "text-gray-700"} mb-2`}>
+            <label className="block text-sm font-medium text-muted-foreground mb-2">
               Store Name
             </label>
             <Input
               placeholder="ElectroZone"
               defaultValue="ElectroZone"
-              className={isDarkMode ? "bg-gray-700 border-gray-600 text-white" : ""}
             />
           </div>
           <div>
-            <label className={`block text-sm font-medium ${isDarkMode ? "text-gray-300" : "text-gray-700"} mb-2`}>
+            <label className="block text-sm font-medium text-muted-foreground mb-2">
               Store Email
             </label>
             <Input
               type="email"
               placeholder="admin@electrozone.com"
-              className={isDarkMode ? "bg-gray-700 border-gray-600 text-white" : ""}
             />
           </div>
           <div>
-            <label className={`block text-sm font-medium ${isDarkMode ? "text-gray-300" : "text-gray-700"} mb-2`}>
+            <label className="block text-sm font-medium text-muted-foreground mb-2">
               Store Description
             </label>
             <textarea
-              className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent ${
-                isDarkMode ? "bg-gray-700 border-gray-600 text-white" : "border-gray-300"
-              }`}
+              className="w-full px-4 py-2 border border-input rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-transparent text-foreground placeholder:text-muted-foreground"
               rows={4}
               placeholder="Describe your store..."
             />
@@ -64,14 +60,14 @@ export default function Settings() {
 
       {/* Security */}
       <div
-        className={`${isDarkMode ? "bg-gray-800 border-gray-700" : "bg-white border-gray-200"} rounded-lg border p-6`}
+        className="bg-card rounded-lg border border-border p-6"
       >
-        <h2 className={`text-xl font-bold ${isDarkMode ? "text-white" : "text-gray-900"} mb-4`}>Security</h2>
+        <h2 className="text-xl font-bold text-foreground mb-4">Security</h2>
         <div className="space-y-4">
           <Button className="bg-green-600 hover:bg-green-700 text-white w-full">Change Password</Button>
           <Button
             variant="outline"
-            className={`w-full ${isDarkMode ? "bg-gray-700 border-gray-600 text-white hover:bg-gray-600" : "bg-transparent"}`}
+            className="w-full"
           >
             Two-Factor Authentication
           </Button>

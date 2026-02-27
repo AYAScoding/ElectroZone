@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { toast } from "sonner";
 import AdminDashboard from "@/components/admin-dashboard";
 import { getAllOrders } from "@/lib/order-api";
 import {
@@ -244,9 +245,10 @@ export default function Home() {
     try {
       await updateUserRole(id, role);
       await loadAll(); // refresh
+      toast.success("User role updated successfully");
     } catch (e) {
       console.error(e);
-      alert("Failed to update user role");
+      toast.error("Failed to update user role");
     }
   }
 
@@ -254,9 +256,15 @@ export default function Home() {
     try {
       await deleteUser(id);
       await loadAll(); // refresh
-    } catch (e) {
+      toast.success("User deleted successfully");
+    } catch (e: any) {
       console.error(e);
-      alert("Failed to delete user. Make sure you aren't deleting yourself.");
+      const errorMessage = e?.message || "Failed to delete user";
+      if (errorMessage.includes("Cannot delete your own account")) {
+        toast.error("You cannot delete your own account!");
+      } else {
+        toast.error("Failed to delete user. Please try again.");
+      }
     }
   }
 

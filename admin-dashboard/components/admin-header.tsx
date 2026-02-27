@@ -81,8 +81,7 @@ export default function Header({ setSidebarOpen, sidebarOpen }: HeaderProps) {
 
   return (
     <div
-      className={`border-b px-6 py-4 flex items-center justify-between ${isDarkMode ? "bg-gray-800 border-gray-700" : "bg-white border-gray-200"
-        }`}
+      className="border-b border-border px-6 py-4 flex items-center justify-between bg-card"
     >
       <button
         onClick={() => setSidebarOpen(!sidebarOpen)}
@@ -95,7 +94,7 @@ export default function Header({ setSidebarOpen, sidebarOpen }: HeaderProps) {
 
       <div className="flex items-center gap-2">
         <a
-          href="http://localhost:3000"
+          href="http://localhost:3002"
           className={`flex items-center gap-2 px-3 py-2 text-sm font-medium rounded-lg transition-colors border ${isDarkMode
             ? "border-gray-600 text-gray-300 hover:bg-gray-700"
             : "border-gray-300 text-gray-600 hover:bg-gray-50"
@@ -129,8 +128,7 @@ export default function Header({ setSidebarOpen, sidebarOpen }: HeaderProps) {
               <div className="fixed inset-0 z-40" onClick={() => setShowColorMenu(false)} />
 
               <div
-                className={`absolute right-0 mt-2 w-56 rounded-lg shadow-lg border z-50 p-4 ${isDarkMode ? "bg-gray-800 border-gray-700" : "bg-white border-gray-200"
-                  }`}
+                className="absolute right-0 mt-2 w-56 rounded-lg shadow-lg border border-border z-50 p-4 bg-card"
               >
                 <div className={`text-xs font-semibold mb-3 ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}>
                   Accent Color
@@ -172,8 +170,7 @@ export default function Header({ setSidebarOpen, sidebarOpen }: HeaderProps) {
               <div className="fixed inset-0 z-40" onClick={() => setShowLanguageMenu(false)} />
 
               <div
-                className={`absolute right-0 mt-2 w-48 rounded-lg shadow-lg border z-50 ${isDarkMode ? "bg-gray-800 border-gray-700" : "bg-white border-gray-200"
-                  }`}
+                className="absolute right-0 mt-2 w-48 rounded-lg shadow-lg border border-border z-50 bg-card"
               >
                 <div
                   className={`px-3 py-2 border-b text-xs font-semibold ${isDarkMode ? "border-gray-700 text-gray-400" : "border-gray-200 text-gray-500"}`}

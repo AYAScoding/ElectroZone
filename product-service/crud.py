@@ -122,13 +122,14 @@ def update_product_stock(db: Session, product_id: int, quantity: int):
     return db_product
 
 def decrease_product_stock(db: Session, product_id: int, quantity: int):
-    """Decrease product stock quantity (for order processing)"""
+    """Decrease product stock quantity (for order processing). Returns None if insufficient stock."""
     db_product = get_product(db, product_id)
-    if db_product:
-        db_product.stock_quantity = max(0, db_product.stock_quantity - quantity)
+    if db_product and db_product.stock_quantity >= quantity:
+        db_product.stock_quantity -= quantity
         db.commit()
         db.refresh(db_product)
-    return db_product
+        return db_product
+    return None
 
 def delete_product(db: Session, product_id: int):
     """Delete a product"""

@@ -70,7 +70,7 @@ export default function Sidebar({ activeTab, setActiveTab, isOpen }: SidebarProp
     <div
       className={cn(
         "w-64 text-white transition-all duration-300 ease-in-out",
-        isDarkMode ? "bg-gradient-to-b from-gray-800 to-gray-900" : `bg-gradient-to-b ${colors.gradient}`,
+        isDarkMode ? "bg-gradient-to-b from-card to-background border-r border-border" : `bg-gradient-to-b ${colors.gradient}`,
         isOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0",
       )}
     >

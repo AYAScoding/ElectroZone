@@ -145,7 +145,10 @@ def decrease_product_stock(product_id: int, qty: int, db: Session = Depends(get_
     """Decrease product stock quantity (for order processing)"""
     db_product = crud.decrease_product_stock(db, product_id=product_id, quantity=qty)
     if db_product is None:
-        raise HTTPException(status_code=404, detail="Product not found")
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST, 
+            detail="Insufficient stock or product not found"
+        )
     return {"message": "Stock decreased successfully", "product_id": product_id, "new_quantity": db_product.stock_quantity}
 
 @app.delete("/products/{product_id}", status_code=status.HTTP_204_NO_CONTENT)

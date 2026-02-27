@@ -5,6 +5,16 @@ import { Search, Shield, User as UserIcon } from "lucide-react"
 import { useTheme } from "../admin-dashboard"
 import { UserDto } from "@/lib/user-api"
 import { Badge } from "@/components/ui/badge"
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+} from "@/components/ui/alert-dialog"
 
 interface UsersProps {
     users: UserDto[] | undefined
@@ -13,15 +23,16 @@ interface UsersProps {
 }
 
 export default function Users({ users = [], onUpdateRole, onDeleteUser }: UsersProps) {
-    const { isDarkMode, accentColor } = useTheme()
+    const { isDarkMode, accentColor, t } = useTheme()
     const [searchTerm, setSearchTerm] = useState("")
+    const [userToDelete, setUserToDelete] = useState<string | null>(null)
 
     const getAccentClass = () => {
         switch (accentColor) {
-            case "blue": return "text-blue-600 bg-blue-100 dark:bg-blue-900 dark:text-blue-300"
-            case "red": return "text-red-600 bg-red-100 dark:bg-red-900 dark:text-red-300"
-            case "orange": return "text-orange-600 bg-orange-100 dark:bg-orange-900 dark:text-orange-300"
-            default: return "text-green-600 bg-green-100 dark:bg-green-900 dark:text-green-300"
+            case "blue": return "text-blue-600 bg-blue-100 dark:bg-blue-900/30 dark:text-blue-300"
+            case "red": return "text-red-600 bg-red-100 dark:bg-red-900/30 dark:text-red-300"
+            case "orange": return "text-orange-600 bg-orange-100 dark:bg-orange-900/30 dark:text-orange-300"
+            default: return "text-green-600 bg-green-100 dark:bg-green-900/30 dark:text-green-300"
         }
     }
 
@@ -33,14 +44,21 @@ export default function Users({ users = [], onUpdateRole, onDeleteUser }: UsersP
     const admins = filteredUsers.filter(u => u.role === "admin")
     const customers = filteredUsers.filter(u => u.role === "customer")
 
+    const handleConfirmDelete = () => {
+        if (userToDelete) {
+            onDeleteUser(userToDelete)
+            setUserToDelete(null)
+        }
+    }
+
     const renderUserTable = (title: string, data: UserDto[]) => (
-        <div className={`mt-8 rounded-xl shadow-sm border overflow-hidden ${isDarkMode ? "bg-gray-800 border-gray-700" : "bg-white border-gray-200"}`}>
-            <div className={`px-6 py-4 border-b flex items-center justify-between ${isDarkMode ? "border-gray-700" : "border-gray-200"}`}>
-                <h3 className={`text-lg font-semibold ${isDarkMode ? "text-white" : "text-gray-900"}`}>{title} ({data.length})</h3>
+        <div className="mt-8 rounded-xl shadow-sm border border-border bg-card overflow-hidden">
+            <div className="px-6 py-4 border-b border-border flex items-center justify-between">
+                <h3 className="text-lg font-semibold text-foreground">{title} ({data.length})</h3>
             </div>
             <div className="overflow-x-auto">
                 <table className="w-full text-left text-sm">
-                    <thead className={isDarkMode ? "bg-gray-900/50 text-gray-400" : "bg-gray-50/50 text-gray-500"}>
+                    <thead className="bg-muted/50 text-muted-foreground">
                         <tr>
                             <th className="px-6 py-4 font-medium">User</th>
                             <th className="px-6 py-4 font-medium">Role</th>
@@ -48,25 +66,25 @@ export default function Users({ users = [], onUpdateRole, onDeleteUser }: UsersP
                             <th className="px-6 py-4 font-medium text-right">Actions</th>
                         </tr>
                     </thead>
-                    <tbody className={`divide-y ${isDarkMode ? "divide-gray-700" : "divide-gray-200"}`}>
+                    <tbody className="divide-y divide-border">
                         {data.length === 0 ? (
                             <tr>
-                                <td colSpan={4} className="px-6 py-8 text-center text-gray-500">
+                                <td colSpan={4} className="px-6 py-8 text-center text-muted-foreground">
                                     No {title.toLowerCase()} found
                                 </td>
                             </tr>
                         ) : (
                             data.map((user) => (
-                                <tr key={user._id} className={`transition-colors ${isDarkMode ? "hover:bg-gray-750/50" : "hover:bg-gray-50"}`}>
+                                <tr key={user._id} className="transition-colors hover:bg-muted/30">
                                     <td className="px-6 py-4">
                                         <div className="flex items-center gap-3">
-                                            <div className={`min-w-10 w-10 h-10 rounded-full flex items-center justify-center ${user.role === 'admin' ? getAccentClass() : isDarkMode ? "bg-gray-700 text-gray-300" : "bg-gray-100 text-gray-500"
+                                            <div className={`min-w-10 w-10 h-10 rounded-full flex items-center justify-center ${user.role === 'admin' ? getAccentClass() : "bg-muted text-muted-foreground"
                                                 }`}>
                                                 {user.role === 'admin' ? <Shield size={18} /> : <UserIcon size={18} />}
                                             </div>
                                             <div className="truncate w-full max-w-[200px]">
-                                                <div className={`font-medium truncate ${isDarkMode ? "text-white" : "text-gray-900"}`}>{user.name}</div>
-                                                <div className={`truncate ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}>{user.email}</div>
+                                                <div className="font-medium truncate text-foreground">{user.name}</div>
+                                                <div className="truncate text-muted-foreground">{user.email}</div>
                                             </div>
                                         </div>
                                     </td>
@@ -76,7 +94,7 @@ export default function Users({ users = [], onUpdateRole, onDeleteUser }: UsersP
                                         </Badge>
                                     </td>
                                     <td className="px-6 py-4">
-                                        <div className={isDarkMode ? "text-gray-300" : "text-gray-600"}>
+                                        <div className="text-muted-foreground">
                                             {new Date(user.createdAt).toLocaleDateString()}
                                         </div>
                                     </td>
@@ -85,25 +103,21 @@ export default function Users({ users = [], onUpdateRole, onDeleteUser }: UsersP
                                             {user.role === 'admin' ? (
                                                 <button
                                                     onClick={() => onUpdateRole(user._id, "customer")}
-                                                    className="text-xs font-medium text-orange-500 hover:text-orange-600 border border-orange-200 hover:bg-orange-50 px-3 py-1.5 rounded-lg transition-colors whitespace-nowrap"
+                                                    className="text-xs font-medium text-orange-500 hover:text-orange-600 border border-orange-200 hover:bg-orange-500/10 dark:border-orange-900/30 px-3 py-1.5 rounded-lg transition-colors whitespace-nowrap"
                                                 >
                                                     Demote
                                                 </button>
                                             ) : (
                                                 <button
                                                     onClick={() => onUpdateRole(user._id, "admin")}
-                                                    className="text-xs font-medium text-green-600 hover:text-green-700 border border-green-200 hover:bg-green-50 px-3 py-1.5 rounded-lg transition-colors whitespace-nowrap"
+                                                    className="text-xs font-medium text-green-600 hover:text-green-700 border border-green-200 hover:bg-green-500/10 dark:border-green-900/30 px-3 py-1.5 rounded-lg transition-colors whitespace-nowrap"
                                                 >
                                                     Make Admin
                                                 </button>
                                             )}
                                             <button
-                                                onClick={() => {
-                                                    if (confirm("Are you sure you want to block and delete this user?")) {
-                                                        onDeleteUser(user._id)
-                                                    }
-                                                }}
-                                                className="text-xs font-medium text-red-600 hover:text-red-700 border border-transparent hover:border-red-200 hover:bg-red-50 px-3 py-1.5 rounded-lg transition-colors whitespace-nowrap"
+                                                onClick={() => setUserToDelete(user._id)}
+                                                className="text-xs font-medium text-red-600 hover:text-red-700 border border-transparent hover:border-red-200 hover:bg-red-500/10 dark:hover:border-red-900/30 px-3 py-1.5 rounded-lg transition-colors whitespace-nowrap"
                                             >
                                                 Block/Delete
                                             </button>
@@ -131,22 +145,40 @@ export default function Users({ users = [], onUpdateRole, onDeleteUser }: UsersP
                 </div>
 
                 <div className="relative w-full sm:w-72">
-                    <Search className={`absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 ${isDarkMode ? "text-gray-400" : "text-gray-500"}`} />
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                     <input
                         type="text"
                         placeholder="Search users..."
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
-                        className={`w-full pl-9 pr-4 py-2 text-sm rounded-lg border focus:outline-none focus:ring-2 focus:ring-${accentColor}-500 ${isDarkMode
-                            ? "bg-gray-900 border-gray-700 text-white placeholder-gray-500"
-                            : "bg-gray-50 border-gray-300 text-gray-900 placeholder-gray-400"
-                            }`}
+                        className={`w-full pl-9 pr-4 py-2 text-sm rounded-lg border border-border bg-input/30 text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-${accentColor}-500 transition-shadow`}
                     />
                 </div>
             </div>
 
             {renderUserTable("Administrators", admins)}
             {renderUserTable("Customers", customers)}
+
+            <AlertDialog open={userToDelete !== null} onOpenChange={(open) => !open && setUserToDelete(null)}>
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                        <AlertDialogDescription>
+                            This action cannot be undone. This will permanently delete the user account
+                            and remove their data from our servers.
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                        <AlertDialogAction
+                            onClick={handleConfirmDelete}
+                            className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                        >
+                            Delete User
+                        </AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
         </div>
     )
 }

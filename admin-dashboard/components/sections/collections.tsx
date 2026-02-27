@@ -31,10 +31,10 @@ export default function Collections({
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className={`text-3xl font-bold ${isDarkMode ? "text-white" : "text-gray-900"}`}>
+          <h1 className="text-3xl font-bold text-foreground">
             {t("manageCollections")}
           </h1>
-          <p className={isDarkMode ? "text-gray-400" : "text-gray-600"}>
+          <p className="text-muted-foreground">
             Organize products into categories and featured collections
           </p>
           {/* </CHANGE> */}
@@ -47,10 +47,8 @@ export default function Collections({
       </div>
 
       {collections.length === 0 ? (
-        <div
-          className={`rounded-lg border p-12 text-center ${isDarkMode ? "bg-gray-800 border-gray-700" : "bg-white border-gray-200"}`}
-        >
-          <p className={isDarkMode ? "text-gray-400" : "text-gray-500"}>{t("noCollections")}</p>
+        <div className="rounded-lg border border-border p-12 text-center bg-card">
+          <p className="text-muted-foreground">{t("noCollections")}</p>
           {/* </CHANGE> */}
         </div>
       ) : (
@@ -58,14 +56,14 @@ export default function Collections({
           {collections.map((collection) => (
             <div
               key={collection.id}
-              className={`rounded-lg border p-6 hover:shadow-lg transition-shadow ${isDarkMode ? "bg-gray-800 border-gray-700" : "bg-white border-gray-200"}`}
+              className="rounded-lg border border-border p-6 hover:shadow-lg transition-shadow bg-card"
             >
               <div className="flex items-start justify-between mb-4">
                 <div>
-                  <h3 className={`font-bold text-lg ${isDarkMode ? "text-white" : "text-gray-900"}`}>
+                  <h3 className="font-bold text-lg text-foreground">
                     {collection.name}
                   </h3>
-                  <p className={`text-sm mt-1 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
+                  <p className="text-sm mt-1 text-muted-foreground">
                     {collection.items} {t("items")}
                   </p>
                   {/* </CHANGE> */}

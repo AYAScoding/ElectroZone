@@ -1,5 +1,6 @@
 package com.example.order_service.client;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -9,21 +10,22 @@ import org.springframework.web.client.RestTemplate;
 
 import jakarta.annotation.PostConstruct;
 
+@Slf4j
 @Service
 public class ProductServiceClient {
 
-    private RestTemplate restTemplate;
+    private final RestTemplate restTemplate;
 
     @Value("${product.service.url:http://localhost:8000}")
     private String productServiceUrl;
 
+    public ProductServiceClient(RestTemplate restTemplate) {
+        this.restTemplate = restTemplate;
+    }
+
     @PostConstruct
     public void init() {
-        // Use a customized factory to support PATCH requests if needed,
-        // though default RestTemplate sometimes struggles with PATCH on older versions.
-        // Spring Boot 3.2 usually works fine with standard RestTemplate for PATCH if
-        // configured.
-        this.restTemplate = new RestTemplate();
+        log.info("ProductServiceClient initialized with URL: {}", productServiceUrl);
     }
 
     public void decreaseStock(Long productId, Integer quantity) {
@@ -35,11 +37,12 @@ public class ProductServiceClient {
         HttpEntity<String> entity = new HttpEntity<>(headers);
 
         try {
-            // Using PATCH for stock decrease
+            log.debug("Attempting to decrease stock for product {}: quantity {}", productId, quantity);
             restTemplate.patchForObject(url, entity, Object.class);
+            log.info("Successfully decreased stock for product {}", productId);
         } catch (Exception e) {
-            // Log error but don't fail the order creation for now to avoid blocking user
-            System.err.println("Failed to decrease stock for product " + productId + ": " + e.getMessage());
+            // Log error with SLF4J
+            log.error("Failed to decrease stock for product {}. Reason: {}", productId, e.getMessage());
         }
     }
 }
