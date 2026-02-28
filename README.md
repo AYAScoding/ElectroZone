@@ -13,8 +13,8 @@
 ### 🛍️ Customer Experience
 
 <p align="center">
-  <img src="./screenshots/storefront.png" width="45%" alt="Storefront Catalog" />
-  <img src="./screenshots/product-detail.png" width="45%" alt="Product Details" />
+  <img src="screenshots\Landing-page.png" width="45%" alt="Storefront Catalog" />
+  <img src="screenshots\products.png" width="45%" alt="Product Details" />
   <br/>
   <em>Modern, responsive catalog with advanced filtering and immersive product views.</em>
 </p>
@@ -24,8 +24,8 @@
 ### 🛠️ Admin Command Center
 
 <p align="center">
-  <img src="./screenshots/admin-overview.png" width="45%" alt="Admin Overview" />
-  <img src="./screenshots/admin-orders.png" width="45%" alt="Order Management" />
+  <img src="screenshots\admin-dash.png" width="45%" alt="Admin Overview" />
+  <img src="screenshots\orders.png" width="45%" alt="Order Management" />
   <br/>
   <em>Comprehensive analytics dashboard with real-time order processing and management tools.</em>
 </p>
