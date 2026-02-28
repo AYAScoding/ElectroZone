@@ -18,7 +18,11 @@ import { useState, useEffect } from "react"
 import { useTranslation } from "@/hooks/use-translation"
 import type { Language } from "@/lib/translations"
 
-export function Header() {
+interface HeaderProps {
+  hideCategoryNav?: boolean
+}
+
+export function Header({ hideCategoryNav = false }: HeaderProps) {
   const { user, logout } = useAuth()
   const { itemCount } = useCart()
   const { t, language, changeLanguage, mounted } = useTranslation()
@@ -229,33 +233,7 @@ export function Header() {
       </div>
 
       {/* Navigation */}
-      <nav className="border-t">
-        <div className="container mx-auto px-4">
-          <div className="flex h-12 items-center gap-6 overflow-x-auto text-sm">
-            <Link href="/products?category=Smartphones" className="whitespace-nowrap hover:text-primary">
-              {t("smartphones")}
-            </Link>
-            <Link href="/products?category=Laptops" className="whitespace-nowrap hover:text-primary">
-              {t("laptops")}
-            </Link>
-            <Link href="/products?category=Tablets" className="whitespace-nowrap hover:text-primary">
-              {t("tablets")}
-            </Link>
-            <Link href="/products?category=Audio" className="whitespace-nowrap hover:text-primary">
-              {t("audio")}
-            </Link>
-            <Link href="/products?category=Wearables" className="whitespace-nowrap hover:text-primary">
-              {t("wearables")}
-            </Link>
-            <Link href="/products?category=Smart Home" className="whitespace-nowrap hover:text-primary">
-              {t("smartHome")}
-            </Link>
-            <Link href="/products?category=Accessories" className="whitespace-nowrap hover:text-primary">
-              {t("accessories")}
-            </Link>
-          </div>
-        </div>
-      </nav>
+      
     </header>
   )
 }
