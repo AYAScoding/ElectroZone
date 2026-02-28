@@ -44,6 +44,25 @@ const PRODUCT_SERVICE_URL = (
   process.env.NEXT_PUBLIC_PRODUCT_SERVICE_URL || "http://localhost:8000"
 ).replace(/\/$/, "");
 
+function toPublicImageUrl(url: string | null | undefined) {
+  if (!url) return "/placeholder.svg";
+
+  // If it's a localhost URL pointing to a different port (like 3000), 
+  // we strip the origin and try to use it as a relative path.
+  if (url.includes("localhost:3000") || url.includes("127.0.0.1:3000")) {
+    const parts = url.split(":3000");
+    if (parts.length > 1) {
+      return parts[1].startsWith("/") ? parts[1] : `/${parts[1]}`;
+    }
+  }
+
+  // If backend returns an absolute URL (e.g. from cloud storage), keep it.
+  if (url && (url.startsWith("http://") || url.startsWith("https://"))) return url;
+
+  // Otherwise treat it as a path to Next.js public/ (must start with /).
+  return url.startsWith("/") ? url : `/${url}`;
+}
+
 function formatMoney(value: number) {
   return new Intl.NumberFormat(undefined, {
     style: "currency",
@@ -158,7 +177,7 @@ export default function OrdersPage() {
                         {product?.image_url ? (
                           // eslint-disable-next-line @next/next/no-img-element
                           <img
-                            src={product.image_url}
+                            src={toPublicImageUrl(product.image_url)}
                             alt={product.name}
                             className="h-16 w-16 rounded object-cover border"
                           />

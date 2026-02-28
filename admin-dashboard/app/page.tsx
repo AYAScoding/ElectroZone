@@ -55,15 +55,33 @@ export default function Home() {
     setError(null);
 
     try {
-      const [categoriesRaw, productsRaw, ordersRaw, usersRaw] = await Promise.all([
+      const results = await Promise.allSettled([
         getCategories(),
         getProducts(),
         getAllOrders(),
         getAllUsers(),
       ]);
 
+      const categoriesRaw = results[0].status === "fulfilled" ? (results[0] as PromiseFulfilledResult<any[]>).value : [];
+      const productsRaw = results[1].status === "fulfilled" ? (results[1] as PromiseFulfilledResult<any[]>).value : [];
+      const ordersRaw = results[2].status === "fulfilled" ? (results[2] as PromiseFulfilledResult<any[]>).value : [];
+      const usersRaw = results[3].status === "fulfilled" ? (results[3] as PromiseFulfilledResult<UserDto[]>).value : [];
+
+      if (results[0].status === "rejected") {
+        toast.error(`Categories failed to load: ${(results[0] as PromiseRejectedResult).reason.message}`);
+      }
+      if (results[1].status === "rejected") {
+        toast.error(`Products failed to load: ${(results[1] as PromiseRejectedResult).reason.message}`);
+      }
+      if (results[2].status === "rejected") {
+        toast.error(`Orders failed to load: ${(results[2] as PromiseRejectedResult).reason.message}`);
+      }
+      if (results[3].status === "rejected") {
+        toast.error(`Users failed to load: ${(results[3] as PromiseRejectedResult).reason.message}`);
+      }
+
       const catNameById = new Map<number, string>(
-        categoriesRaw.map((c) => [c.id, c.name])
+        categoriesRaw.map((c: any) => [c.id, c.name])
       ); // [file:12]
       const productCountByCategory = new Map<number, number>();
       for (const p of productsRaw) {
@@ -74,7 +92,7 @@ export default function Home() {
         );
       }
 
-      const categoriesUi = categoriesRaw.map((c) => ({
+      const categoriesUi = categoriesRaw.map((c: any) => ({
         id: c.id,
         name: c.name,
         items: productCountByCategory.get(c.id) ?? 0,
@@ -94,7 +112,7 @@ export default function Home() {
 
       // Build lookup: userId (string) → user name
       const userNameById = new Map<string, string>(
-        usersRaw.map((u: any) => [String(u._id), u.name || u.email || "Unknown"])
+        usersRaw.map((u: UserDto) => [String(u._id), u.name || u.email || "Unknown"])
       );
 
       const ordersUi = ordersRaw.map((o: any) => ({
@@ -173,7 +191,7 @@ export default function Home() {
       }));
     } catch (e: any) {
       console.error(e);
-      setError(e?.message ?? "Failed to load data");
+      setError(e?.message ?? "An unexpected error occurred");
     } finally {
       setLoading(false);
     }

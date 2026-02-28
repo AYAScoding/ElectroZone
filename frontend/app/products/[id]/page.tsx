@@ -40,11 +40,19 @@ type ApiProduct = {
 
 function toPublicImageUrl(url: string | null | undefined) {
   if (!url) return "/placeholder.svg";
-  // If backend returns an absolute URL, keep it.
+
+  // If it's a localhost URL pointing to a different port (like 3000), 
+  // we strip the origin and try to use it as a relative path.
+  if (url.includes("localhost:3000") || url.includes("127.0.0.1:3000")) {
+    const parts = url.split(":3000");
+    if (parts.length > 1) {
+      return parts[1].startsWith("/") ? parts[1] : `/${parts[1]}`;
+    }
+  }
+
+  // If backend returns an absolute URL (e.g. from cloud storage), keep it.
   if (url.startsWith("http://") || url.startsWith("https://")) return url;
-  // If backend returns a Windows path by mistake, ignore it.
-  if (url.includes(":\\") || url.includes("C:\\") || url.includes("\\public\\"))
-    return "/placeholder.svg";
+
   // Otherwise treat it as a path to Next.js public/ (must start with /).
   return url.startsWith("/") ? url : `/${url}`;
 }
@@ -269,8 +277,8 @@ export default function ProductDetailPage() {
                     key={index}
                     onClick={() => setSelectedImage(index)}
                     className={`relative aspect-square overflow-hidden rounded-lg border-2 transition-colors ${selectedImage === index
-                        ? "border-primary"
-                        : "border-transparent"
+                      ? "border-primary"
+                      : "border-transparent"
                       }`}
                   >
                     <Image
@@ -300,8 +308,8 @@ export default function ProductDetailPage() {
                       <Star
                         key={i}
                         className={`h-5 w-5 ${i < Math.floor(product.rating)
-                            ? "fill-yellow-400 text-yellow-400"
-                            : "fill-muted text-muted"
+                          ? "fill-yellow-400 text-yellow-400"
+                          : "fill-muted text-muted"
                           }`}
                       />
                     ))}
@@ -494,8 +502,8 @@ export default function ProductDetailPage() {
                               <Star
                                 key={i}
                                 className={`h-4 w-4 ${i < review.rating
-                                    ? "fill-yellow-400 text-yellow-400"
-                                    : "fill-muted text-muted"
+                                  ? "fill-yellow-400 text-yellow-400"
+                                  : "fill-muted text-muted"
                                   }`}
                               />
                             ))}

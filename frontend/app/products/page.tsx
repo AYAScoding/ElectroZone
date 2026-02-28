@@ -48,6 +48,16 @@ const API_BASE = process.env.NEXT_PUBLIC_PRODUCT_API;
 
 function toPublicImageUrl(url: string | null | undefined) {
   if (!url) return "/placeholder.svg";
+
+  // If it's a localhost URL pointing to a different port (like 3000), 
+  // we strip the origin and try to use it as a relative path if it looks like a local file.
+  if (url.includes("localhost:3000") || url.includes("127.0.0.1:3000")) {
+    const parts = url.split(":3000");
+    if (parts.length > 1) {
+      return parts[1].startsWith("/") ? parts[1] : `/${parts[1]}`;
+    }
+  }
+
   if (url.startsWith("http://") || url.startsWith("https://")) return url;
   if (url.includes(":\\") || url.includes("\\public\\"))
     return "/placeholder.svg";
