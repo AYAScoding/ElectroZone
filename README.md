@@ -81,7 +81,7 @@ graph TD
 
 ---
 
-## ✨ Enterprise Features
+##  Enterprise Features
 
 - **🔐 Robust Security:** Zero-trust JWT authentication with role-based dashboard access.
 - **📦 Smart Inventory:** Atomic stock reduction logic across Product/Order service boundaries.
