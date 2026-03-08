@@ -21,7 +21,7 @@
 
 ---
 
-### 🛠️ Admin Command Center
+###  Admin Command Center
 
 <p align="center">
   <img src="screenshots\admin-dash.png" width="49%" alt="Admin Overview" />
@@ -32,7 +32,7 @@
 
 ---
 
-## 🏗️ Architecture
+##  Architecture
 
 The platform follows a **Decoupled Microservices Pattern**, ensuring each domain (Users, Products, Orders) is independently scalable and maintainable.
 
@@ -65,7 +65,7 @@ graph TD
 
 ---
 
-## 🛠️ Technology Stack
+##  Technology Stack
 
 ### **Frontend & UI**
 - **Framework:** Next.js 14+ (App Router)
@@ -81,7 +81,7 @@ graph TD
 
 ---
 
-## ✨ Enterprise Features
+##  Enterprise Features
 
 - **🔐 Robust Security:** Zero-trust JWT authentication with role-based dashboard access.
 - **📦 Smart Inventory:** Atomic stock reduction logic across Product/Order service boundaries.
@@ -91,7 +91,7 @@ graph TD
 
 ---
 
-## 🚀 Getting Started
+##  Getting Started
 
 ### 🐳 Backend Services (Docker)
 
