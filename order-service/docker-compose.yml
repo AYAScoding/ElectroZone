@@ -11,4 +11,4 @@ services:
       SPRING_DATASOURCE_URL: "jdbc:mysql://host.docker.internal:3307/order_service_db?useSSL=false&allowPublicKeyRetrieval=true"
       SPRING_DATASOURCE_USERNAME: "root"
       SPRING_DATASOURCE_PASSWORD: "SQL@4PASSword"
-      STRIPE_SECRET_KEY: "sk_test_51Sgn8rCImW3Tpr7j3UvUGwcXNMiGTCQP9XZ6xJgJJETmVmIhB1OU7SZcPEjjMpgmfSFC5nVjXclspGtRSW06Wu5W00zFgfnZpc"
+      STRIPE_SECRET_KEY: ""
